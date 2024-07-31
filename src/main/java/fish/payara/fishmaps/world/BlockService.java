@@ -1,0 +1,56 @@
+package fish.payara.fishmaps.world;
+
+import fish.payara.fishmaps.world.block.Block;
+import fish.payara.fishmaps.world.block.Chunk;
+import jakarta.ejb.Stateless;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Stateless
+public class BlockService {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public Block getBlock (String descriptor) {
+        return this.entityManager.find(Block.class, descriptor);
+    }
+
+    public Block getBlock (int x, int z, String dimension) {
+        return this.entityManager.find(Block.class, Block.getDescriptor(x, z, dimension));
+    }
+
+    public int countBlocks () {
+        return this.entityManager.createQuery("Select a from Block a", Block.class).getResultList().size();
+    }
+
+    public Chunk getChunk (int chunkX, int chunkZ, String dimension) {
+        int minBlockX = chunkX * Chunk.CHUNK_LENGTH;
+        int maxBlockX = minBlockX + Chunk.CHUNK_LENGTH - 1;
+        int minBlockZ = chunkZ * Chunk.CHUNK_LENGTH;
+        int maxBlockZ = chunkZ + Chunk.CHUNK_LENGTH - 1;
+
+        List<Block> blocks = new ArrayList<>();
+        for (int x = minBlockX; x <= maxBlockX; ++x) {
+            for (int z = minBlockZ; z <= maxBlockZ; ++z) {
+                Block block = this.getBlock(x, z, dimension);
+                if (block != null) blocks.add(block);
+            }
+        }
+        return new Chunk(blocks, dimension);
+    }
+
+    public void add (Block block) {
+        Block preexisting = this.getBlock(block.getDescriptor());
+        if (preexisting == null) {
+            this.entityManager.persist(block);
+        }
+        else {
+            this.entityManager.remove(preexisting);
+            this.entityManager.flush();
+            this.entityManager.persist(block);
+        }
+    }
+}
