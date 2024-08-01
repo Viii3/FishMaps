@@ -6,9 +6,22 @@
 
 <h:head>
     <title>FishMaps Landing Page</title>
+    <script src="scripts/mapcontroller.js"></script>
+    <link rel="stylesheet" href="styles/stylesheet.css" />
 </h:head>
-<h:body>
-    <h1>Example Page</h1>
-    <h:graphicImage value="images/map?x=0&amp;z=0&amp;dimension=minecraft:overworld" />
+<h:body onload="renderMap()">
+    <h1>Demo Map</h1>
+    <div id="mapView"></div>
+    <div id="controller">
+        <div class="controlpanel">
+            <img src="images/up.png" onclick="up()" />
+        </div>
+        <br/>
+        <div class="controlpanel">
+            <img src="images/left.png" onclick="left()" />
+            <img src="images/down.png" onclick="down()" />
+            <img src="images/right.png" onclick="right()" />
+        </div>
+    </div>
 </h:body>
 </html>

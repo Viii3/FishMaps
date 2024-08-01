@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.world;
 
+import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.Chunk;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
@@ -20,13 +21,22 @@ public class VisualMapServlet extends HttpServlet {
 
     @Override
     protected void doGet (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int chunkX = Integer.parseInt(req.getParameter("x"));
-        int chunkZ = Integer.parseInt(req.getParameter("z"));
+        int blockX = Integer.parseInt(req.getParameter("x"));
+        int blockZ = Integer.parseInt(req.getParameter("z"));
+        int width = Integer.parseInt(req.getParameter("width"));
+        int height = Integer.parseInt(req.getParameter("height"));
         String dimension = req.getParameter("dimension");
 
-        BufferedImage image = new BufferedImage(Chunk.CHUNK_LENGTH, Chunk.CHUNK_LENGTH, BufferedImage.TYPE_INT_RGB);
-        Chunk chunk = this.service.getChunk(chunkX, chunkZ, dimension);
-        chunk.iterator().forEachRemaining(block -> image.setRGB(block.getX() % 16, block.getZ() % 16, block.getColour()));
+        int leftMost = blockX - (width / 2);
+        int topMost = blockZ - (height / 2);
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < width; ++x) {
+            for (int z = 0; z < height; ++z) {
+                Block block = this.service.getBlock(x + leftMost, z + topMost, dimension);
+                if (block != null) image.setRGB(x, z, block.getColour());
+                else image.setRGB(x, z, 0);
+            }
+        }
 
         resp.setContentType("image/png");
         OutputStream stream = resp.getOutputStream();
