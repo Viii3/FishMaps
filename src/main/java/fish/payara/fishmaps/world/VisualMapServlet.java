@@ -20,8 +20,8 @@ public class VisualMapServlet extends HttpServlet {
 
     @Override
     protected void doGet (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int chunkX = Integer.getInteger(req.getParameter("x"));
-        int chunkZ = Integer.getInteger(req.getParameter("z"));
+        int chunkX = Integer.parseInt(req.getParameter("x"));
+        int chunkZ = Integer.parseInt(req.getParameter("z"));
         String dimension = req.getParameter("dimension");
 
         BufferedImage image = new BufferedImage(Chunk.CHUNK_LENGTH, Chunk.CHUNK_LENGTH, BufferedImage.TYPE_INT_RGB);
