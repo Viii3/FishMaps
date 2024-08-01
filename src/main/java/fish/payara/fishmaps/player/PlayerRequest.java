@@ -9,6 +9,10 @@ public class PlayerRequest implements Serializable {
     private int x, z;
     private String dimension;
 
+    public PlayerRequest () {
+
+    }
+
     public Player toPlayer () {
         return new Player(name, Block.getDescriptor(x, z, dimension), System.currentTimeMillis());
     }
