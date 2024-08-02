@@ -1,0 +1,38 @@
+#controller {
+    z-index: 10;
+    position: sticky;
+    float: right;
+    bottom: 20px;
+    right: 20px;
+    line-height: 0px;
+}
+
+#controller img {
+    width: 50px;
+    height: 50px;
+}
+
+.controlpanel {
+    display: flex;
+    justify-content: center;
+    line-height: 0px;
+}
+
+#mapView {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overflow: hidden;
+    line-height: 0px;
+    white-space: nowrap;
+    background-color: black;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+}
+
+body {
+    overflow-x: hidden;
+    overflow-y: hidden;
+    overflow: hidden;
+    margin: 0px;
+}
