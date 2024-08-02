@@ -26,20 +26,53 @@ function renderMap () {
 
 function up () {
     currentZ += STEP;
+    updateURL();
     renderMap();
 }
 
 function down () {
     currentZ -= STEP;
+    updateURL();
     renderMap();
 }
 
 function left () {
     currentX += STEP;
+    updateURL();
     renderMap();
 }
 
 function right () {
     currentX -= STEP;
+    updateURL();
+    renderMap();
+}
+
+function parseURL () {
+    const query = new URLSearchParams(window.location.search);
+
+    if (query.has("x")) currentX = parseIntParam(query.get("x"));
+    if (query.has("z")) currentZ = parseIntParam(query.get("z"));
+    if (query.has("dimension")) dimension = query.get("dimension");
+}
+
+function updateURL () {
+    const query = new URLSearchParams(window.location.search);
+    query.set("x", currentX);
+    query.set("z", currentZ);
+    query.set("dimension", dimension);
+    
+    window.history.replaceState(null, null, "map.xhtml?" + query.toString());
+}
+
+function parseIntParam (param) {
+    let num = Number(param);
+    if (num == NaN) return 0;
+    return Math.floor(num);
+}
+
+function startup () {
+    parseURL();
+    updateURL();
     renderMap();
 }
