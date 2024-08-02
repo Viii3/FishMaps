@@ -5,7 +5,7 @@
             jdbc/local-postgres
         </jta-data-source>
         <properties>
-            <property name="jakarta.persistence.schema-generation.database.action" value="drop-and-create"/>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
             <property name="eclipse.logging.level" value="FINEST"/>
         </properties>
     </persistence-unit>
