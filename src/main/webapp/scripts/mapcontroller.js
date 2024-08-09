@@ -1,23 +1,28 @@
-const WIDTH = 1920;
-const HEIGHT = 1080;
+var width = 1920;
+var height = 1080;
 const STEP = 40;
 
 var currentX = 0;
 var currentZ = 0;
 var dimension = "minecraft:overworld";
+var scale = 1;
 
 function renderMap () {
+    width = window.outerWidth;
+    height = window.outerHeight;
+
     let map = document.getElementById("mapView");
     map.innerHTML = "";
 
-    const topLeftX = Math.floor(currentX - (WIDTH / 2));
-    const topLeftZ = Math.floor(currentZ - (HEIGHT / 2));
-    for (let z = 0; z < HEIGHT / STEP; ++z) {
-        for (let x = 0; x < WIDTH / STEP; ++x) {
+    const scaledStep = Math.floor(STEP * scale);
+    const topLeftX = Math.floor(currentX - (width / 2));
+    const topLeftZ = Math.floor(currentZ - (height / 2));
+    for (let z = 0; z < height / scaledStep; z += scaledStep) {
+        for (let x = 0; x < width / scaledStep; x += scaledStep) {
             let image = document.createElement("img");
             image.class = "mapTile";
             image.style = "width:" + STEP + "px;height:" + STEP + "px;"
-            image.src = "images/map?x=" + (topLeftX + currentX + x * STEP) + "&z=" + (topLeftZ + currentZ + z * STEP) + "&dimension=" + dimension + "&width=" + STEP + "&height=" + STEP;
+            image.src = "images/map?x=" + (topLeftX + currentX + x) + "&z=" + (topLeftZ + currentZ + z) + "&dimension=" + dimension + "&width=" + STEP + "&height=" + STEP + "&scale=" + scale;
             map.appendChild(image);
         }
         map.appendChild(document.createElement("br"));

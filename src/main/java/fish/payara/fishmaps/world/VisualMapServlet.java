@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 @WebServlet("/images/map/*")
 public class VisualMapServlet extends HttpServlet {
@@ -22,16 +23,18 @@ public class VisualMapServlet extends HttpServlet {
     protected void doGet (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int blockX = Integer.parseInt(req.getParameter("x"));
         int blockZ = Integer.parseInt(req.getParameter("z"));
-        int width = Integer.parseInt(req.getParameter("width"));
-        int height = Integer.parseInt(req.getParameter("height"));
+        int width = Math.max(1, Integer.parseInt(req.getParameter("width")));
+        int height = Math.max(1, Integer.parseInt(req.getParameter("height")));
+        int scale = Math.max(1, Integer.parseInt(req.getParameter("scale")));
         String dimension = req.getParameter("dimension");
 
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        for (int x = 0; x < width; ++x) {
-            for (int z = 0; z < height; ++z) {
-                Block block = this.service.getBlock(x + blockX, z + blockZ, dimension);
-                if (block != null) image.setRGB(x, z, block.getColour());
-                else image.setRGB(x, z, 0);
+        BufferedImage image = new BufferedImage(width * scale, height * scale, BufferedImage.TYPE_INT_RGB);
+        List<Block> blocks = this.service.getBlocksInRange(blockX, blockX + width - 1, blockZ, blockZ + height - 1, dimension);
+        for (Block block : blocks) {
+            for (int offsetX = 0; offsetX < scale; ++offsetX) {
+                for (int offetZ = 0; offetZ < scale; ++offetZ) {
+                    image.setRGB(block.getX() - blockX, block.getZ() - blockZ, block.getColour());
+                }
             }
         }
 

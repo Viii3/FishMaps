@@ -26,8 +26,9 @@ public class MapResource {
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/blocks")
-    public int countBlocks () {
-        return this.blockService.countBlocks();
+    public long countBlocks (@QueryParam("dimension") String dimension) {
+        if (dimension == null) return this.blockService.countBlocks();
+        return this.blockService.countBlocks(dimension);
     }
 
     @GET

@@ -2,13 +2,38 @@ package fish.payara.fishmaps.world.block;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 import java.io.Serializable;
 
 @Entity
 @Table(name = "blocks")
+@NamedQueries({
+    @NamedQuery(
+        name = Block.QUERY_BLOCKS_IN_RANGE,
+        query = "SELECT b FROM Block b WHERE b.x >= :minX AND b.x <= :maxX AND b.z >= :minZ AND b.z <= :maxZ AND b.dimension = :dimension"
+    ),
+    @NamedQuery(
+        name = Block.QUERY_DIMENSION_LIST,
+        query = "SELECT DISTINCT b.dimension FROM Block b"
+    ),
+    @NamedQuery(
+        name = Block.QUERY_BLOCK_COUNT,
+        query = "SELECT COUNT(b) FROM Block b"
+    ),
+    @NamedQuery(
+        name = Block.QUERY_BLOCK_COUNT_DIMENSION,
+        query = "SELECT COUNT(b) FROM Block b WHERE b.dimension = :dimension"
+    )
+})
 public class Block implements Serializable {
+    public static final String QUERY_BLOCKS_IN_RANGE = "Block.blocksInRange";
+    public static final String QUERY_DIMENSION_LIST = "Block.getAllDimensions";
+    public static final String QUERY_BLOCK_COUNT = "Block.getBlockCount";
+    public static final String QUERY_BLOCK_COUNT_DIMENSION = "Block.getBlockCountDimension";
+
     @Id
     private String descriptor;
     private int x;

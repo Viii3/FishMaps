@@ -22,8 +22,34 @@ public class BlockService {
         return this.entityManager.find(Block.class, Block.getDescriptor(x, z, dimension));
     }
 
-    public int countBlocks () {
-        return this.entityManager.createQuery("Select a from Block a", Block.class).getResultList().size();
+    public List<Block> getBlocksInRange (int minX, int maxX, int minZ, int maxZ, String dimension) {
+        return this.entityManager.createNamedQuery(Block.QUERY_BLOCKS_IN_RANGE, Block.class)
+            .setParameter("minX", minX)
+            .setParameter("maxX", maxX)
+            .setParameter("minZ", minZ)
+            .setParameter("maxZ", maxZ)
+            .setParameter("dimension", dimension)
+            .getResultList();
+    }
+
+    public long countBlocks () {
+        try {
+            Number count = (Number) this.entityManager.createNamedQuery(Block.QUERY_BLOCK_COUNT).getSingleResult();
+            return count.longValue();
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public long countBlocks (String dimension) {
+        try {
+            Number count = (Number) this.entityManager.createNamedQuery(Block.QUERY_BLOCK_COUNT_DIMENSION).setParameter("dimension", dimension).getSingleResult();
+            return count.longValue();
+        }
+        catch (Exception e) {
+            return 0;
+        }
     }
 
     public Chunk getChunk (int chunkX, int chunkZ, String dimension) {
@@ -52,5 +78,9 @@ public class BlockService {
             this.entityManager.flush();
             this.entityManager.persist(block);
         }
+    }
+
+    public List<String> getDimensions () {
+        return this.entityManager.createNamedQuery(Block.QUERY_DIMENSION_LIST, String.class).getResultList();
     }
 }
