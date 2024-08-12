@@ -1,21 +1,28 @@
 #controller {
     z-index: 10;
-    position: sticky;
+    position: fixed;
     float: right;
     bottom: 20px;
     right: 20px;
     line-height: 0px;
 }
 
-#controller img {
+.largeButton {
     width: 64px;
     height: 64px;
+}
+
+.smallButton {
+    width: 32px;
+    height: 32px;
 }
 
 .controlpanel {
     display: flex;
     justify-content: center;
+    align-items: flex-end;
     line-height: 0px;
+    position: relative;
 }
 
 #mapView {

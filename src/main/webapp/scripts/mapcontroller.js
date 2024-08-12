@@ -1,6 +1,6 @@
 var width = 1920;
 var height = 1080;
-const STEP = 40;
+const STEP = 32;
 
 var currentX = 0;
 var currentZ = 0;
@@ -17,11 +17,11 @@ function renderMap () {
     const scaledStep = Math.floor(STEP * scale);
     const topLeftX = Math.floor(currentX - (width / 2));
     const topLeftZ = Math.floor(currentZ - (height / 2));
-    for (let z = 0; z < height / scaledStep; z += scaledStep) {
-        for (let x = 0; x < width / scaledStep; x += scaledStep) {
+    for (let z = 0; z < height / scale; z += STEP) {
+        for (let x = 0; x < width / scale; x += STEP) {
             let image = document.createElement("img");
             image.class = "mapTile";
-            image.style = "width:" + STEP + "px;height:" + STEP + "px;"
+            image.style.cssText = "width:" + scaledStep + "px;height:" + scaledStep + "px;"
             image.src = "images/map?x=" + (topLeftX + currentX + x) + "&z=" + (topLeftZ + currentZ + z) + "&dimension=" + dimension + "&width=" + STEP + "&height=" + STEP + "&scale=" + scale;
             map.appendChild(image);
         }
@@ -30,27 +30,39 @@ function renderMap () {
 }
 
 function up () {
-    currentZ += STEP;
+    currentZ -= STEP * scale;
     updateURL();
     renderMap();
 }
 
 function down () {
-    currentZ -= STEP;
+    currentZ += STEP * scale;
     updateURL();
     renderMap();
 }
 
 function left () {
-    currentX += STEP;
+    currentX -= STEP * scale;
     updateURL();
     renderMap();
 }
 
 function right () {
-    currentX -= STEP;
+    currentX += STEP * scale;
     updateURL();
     renderMap();
+}
+
+function zoomIn () {
+    ++scale;
+    renderMap();
+}
+
+function zoomOut () {
+    if (scale > 1) {
+        --scale;
+        renderMap();
+    }
 }
 
 function parseURL () {
