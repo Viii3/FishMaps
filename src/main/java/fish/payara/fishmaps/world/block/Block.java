@@ -56,7 +56,20 @@ public class Block implements Serializable {
     }
 
     public static String getDescriptor (int x, int z, String dimension) {
-        return String.format("%d-%d-%s", x, z, dimension);
+        return String.format("%d %d %s", x, z, dimension);
+    }
+
+    public static Block fromDescriptor (String descriptor) {
+        Block block = new Block();
+        String[] split = descriptor.split(" ", 3);
+        block.setDimension(split[2]);
+        try {
+            block.setX(Integer.parseInt(split[0]));
+            block.setZ(Integer.parseInt(split[1]));
+        }
+        catch (Exception ignored) {}
+
+        return block;
     }
 
     public String getDescriptor () {
