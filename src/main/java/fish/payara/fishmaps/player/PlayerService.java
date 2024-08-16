@@ -1,9 +1,10 @@
 package fish.payara.fishmaps.player;
 
-import fish.payara.fishmaps.world.block.Block;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
+import java.util.List;
 
 @Stateless
 public class PlayerService {
@@ -34,11 +35,13 @@ public class PlayerService {
         }
     }
 
-    public void update (String name, int x, int z, String dimension) {
-        Player player = this.entityManager.find(Player.class, name);
-        player.setLocation(Block.getDescriptor(x, z, dimension));
-        player.setTimeLastSeen(System.currentTimeMillis());
-
-        this.add(player);
+    public List<Player> get (int minX, int maxX, int minZ, int maxZ, String dimension) {
+        return this.entityManager.createNamedQuery(Player.QUERY_POSITION, Player.class)
+            .setParameter("minX", minX)
+            .setParameter("maxX", maxX)
+            .setParameter("minZ", minZ)
+            .setParameter("maxZ", maxZ)
+            .setParameter("dimension", dimension)
+            .getResultList();
     }
 }

@@ -17,6 +17,17 @@ public class PlayerRequest implements Serializable {
         return new Player(name, Block.getDescriptor(x, z, dimension), System.currentTimeMillis());
     }
 
+    public static PlayerRequest fromPlayer (Player player) {
+        PlayerRequest request = new PlayerRequest();
+        Block block = Block.fromDescriptor(player.getLocation());
+        request.setName(player.getName());
+        request.setX(block.getX());
+        request.setZ(block.getZ());
+        request.setDimension(block.getDimension());
+
+        return request;
+    }
+
     public void setName (String name) {
         this.name = name;
     }
