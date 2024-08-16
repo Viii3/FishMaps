@@ -1,7 +1,9 @@
 package fish.payara.fishmaps.world;
 
 import fish.payara.fishmaps.world.block.Block;
+import fish.payara.fishmaps.world.block.BlockEvent;
 import fish.payara.fishmaps.world.block.Chunk;
+import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -15,6 +17,9 @@ import jakarta.ws.rs.core.MediaType;
 public class MapResource {
     @Inject
     private BlockService blockService;
+
+    @Inject
+    private Event<BlockEvent> event;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -44,6 +49,6 @@ public class MapResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/block")
     public void postBlock (BlockRequest request) {
-        this.blockService.add(request.toBlock());
+        this.event.fire(new BlockEvent(request.toBlock()));
     }
 }

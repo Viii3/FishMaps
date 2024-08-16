@@ -1,8 +1,10 @@
 package fish.payara.fishmaps.world;
 
 import fish.payara.fishmaps.world.block.Block;
+import fish.payara.fishmaps.world.block.BlockEvent;
 import fish.payara.fishmaps.world.block.Chunk;
 import jakarta.ejb.Stateless;
+import jakarta.enterprise.event.Observes;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
@@ -78,6 +80,10 @@ public class BlockService {
             this.entityManager.flush();
             this.entityManager.persist(block);
         }
+    }
+
+    public void add (@Observes BlockEvent event) {
+        this.add(event.block());
     }
 
     public List<String> getDimensions () {

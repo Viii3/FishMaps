@@ -72,6 +72,18 @@ public class Block implements Serializable {
         return block;
     }
 
+    public int getChunkX () {
+        return (this.x / Chunk.CHUNK_LENGTH) - (this.x < 0 ? 1 : 0);
+    }
+
+    public int getChunkZ () {
+        return (this.z / Chunk.CHUNK_LENGTH) - (this.z < 0 ? 1 : 0);
+    }
+
+    public String getChunkDescriptor () {
+        return Block.getDescriptor(this.getChunkX(), this.getChunkZ(), this.dimension);
+    }
+
     public String getDescriptor () {
         return this.descriptor;
     }
