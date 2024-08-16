@@ -1,5 +1,8 @@
 package fish.payara.fishmaps.world;
 
+import fish.payara.fishmaps.event.EventService;
+import fish.payara.fishmaps.player.PlayerRequest;
+import fish.payara.fishmaps.player.PlayerService;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockEvent;
 import fish.payara.fishmaps.world.block.Chunk;
@@ -13,10 +16,18 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
+import java.util.List;
+
 @Path("/map")
 public class MapResource {
     @Inject
     private BlockService blockService;
+
+    @Inject
+    private PlayerService playerService;
+
+    @Inject
+    private EventService eventService;
 
     @Inject
     private Event<BlockEvent> event;
@@ -42,6 +53,13 @@ public class MapResource {
     public Block[] getChunk (@QueryParam("x") int x, @QueryParam("z") int z, @QueryParam("dimension") String dimension) {
         Chunk chunk = this.blockService.getChunk(x, z, dimension);
         return chunk.getBlockArray();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/player")
+    public List<PlayerRequest> getPlayers (@QueryParam("minX") int minX, @QueryParam("maxX") int maxX, @QueryParam("minZ") int minZ, @QueryParam("maxZ") int maxZ, @QueryParam("dimension") String dimension) {
+        return this.playerService.get(minX, maxX, minZ, maxZ, dimension).stream().map(PlayerRequest::fromPlayer).toList();
     }
 
     @POST

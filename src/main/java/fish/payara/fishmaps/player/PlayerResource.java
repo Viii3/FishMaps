@@ -9,8 +9,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
-import java.util.List;
-
 @Path("/player")
 public class PlayerResource {
     @Inject
@@ -20,14 +18,6 @@ public class PlayerResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Player getPlayer (@QueryParam("name") String name) {
         return this.playerService.get(name);
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/map")
-    public List<PlayerRequest> getPlayersOnMap (@QueryParam("minX") int minX, @QueryParam("maxX") int maxX, @QueryParam("minZ") int minZ, @QueryParam("maxZ") int maxZ, @QueryParam("dimension") String dimension) {
-        return this.playerService.get(minX, maxX, minZ, maxZ, dimension).stream().map(PlayerRequest::fromPlayer).toList();
     }
 
     @GET
