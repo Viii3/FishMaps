@@ -15,7 +15,13 @@ public class PlayerService {
     }
 
     public int count () {
-        return this.entityManager.createQuery("Select a from Player a", Player.class).getResultList().size();
+        try {
+            Number number = (Number)this.entityManager.createNamedQuery(Player.QUERY_COUNT).getSingleResult();
+            return number.intValue();
+        }
+        catch (Exception e) {
+            return 0;
+        }
     }
 
     public void add (Player player) {
