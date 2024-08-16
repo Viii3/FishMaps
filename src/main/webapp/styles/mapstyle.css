@@ -10,11 +10,13 @@
 .largeButton {
     width: 64px;
     height: 64px;
+    image-rendering: pixelated;
 }
 
 .smallButton {
     width: 32px;
     height: 32px;
+    image-rendering: pixelated;
 }
 
 .controlpanel {
@@ -25,16 +27,42 @@
     position: relative;
 }
 
-#mapView {
+.view {
     overflow-x: hidden;
     overflow-y: hidden;
     overflow: hidden;
     line-height: 0px;
     white-space: nowrap;
-    background-color: black;
     height: 100%;
     width: 100%;
     margin: 0px;
+}
+
+#mapView {
+    z-index: 0;
+    background-color: black;
+}
+
+#eventView {
+    z-index: 1;
+}
+
+#playerView {
+    z-index: 2;
+}
+
+.player {
+    position: absolute;
+    image-rendering: pixelated;
+    width: 24px;
+    height: 24px;
+}
+
+.event {
+    position: absolute;
+    image-rendering: pixelated;
+    width: 24px;
+    height: 24px;
 }
 
 body {
