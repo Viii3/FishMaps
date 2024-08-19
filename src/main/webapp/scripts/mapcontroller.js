@@ -65,8 +65,8 @@ function renderMap () {
 }
 
 function updateMapCache (blockX, blockZ) {
-    let tileX = STEP * scale * Math.floor(blockX / STEP) - (currentX % STEP);
-    let tileZ = STEP * scale * Math.floor(blockZ / STEP) - (currentZ % STEP);
+    let tileX = STEP * Math.floor(blockX / STEP) - (currentX % STEP);
+    let tileZ = STEP * Math.floor(blockZ / STEP) - (currentZ % STEP);
     let tileId = "(" + tileX + "," + tileZ + ")";
     
     if (document.getElementById(tileId) != null) {
