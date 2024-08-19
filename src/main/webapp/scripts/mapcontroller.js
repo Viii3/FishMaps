@@ -96,15 +96,16 @@ function partialUpdateMap () {
     }
 }
 
-// TODO: Players are not rendered in the correct place and do not move properly with the map.
 function renderPlayers () {
-    const playerHeadHalfWidth = Math.floor(26 / 2);
+    const playerHeadHalfWidth = Math.floor(24 / 2);
     let playerView = document.getElementById("playerView");
     playerView.innerHTML = "";
 
     for (let player of playerData) {
-        let xPos = (player.x - topLeftX) * scale + playerHeadHalfWidth;
-        let zPos = (player.z - topLeftZ) * scale + playerHeadHalfWidth;
+        if (player.dimension != dimension) continue;
+
+        let xPos = (player.x - topLeftX) * scale - playerHeadHalfWidth;
+        let zPos = (player.z - topLeftZ) * scale - playerHeadHalfWidth;
 
         let playerHead = document.createElement("img");
         playerHead.className = "player";
@@ -118,12 +119,15 @@ function renderPlayers () {
 }
 
 function renderEvents () {
+    const eventIconHalfWidth = Math.floor(24 / 2);
     let eventView = document.getElementById("eventView");
     eventView.innerHTML = "";
 
     for (let event of eventData) {
-        let xPos = (event.x - topLeftX) * scale;
-        let zPos = (event.z - topLeftZ) * scale;
+        if (event.dimension != dimension) continue;
+
+        let xPos = (event.x - topLeftX) * scale - eventIconHalfWidth;
+        let zPos = (event.z - topLeftZ) * scale - eventIconHalfWidth;
 
         let eventImg = document.createElement("img");
         eventImg.className = "event";
@@ -248,7 +252,6 @@ function startup () {
 
     socket = new WebSocket("ws://" + document.location.host + "/fishmaps/update/map");
     socket.onmessage = function (event) {
-        console.log(event.data);
         parseWebsockList(JSON.parse(event.data));
     }
 }
