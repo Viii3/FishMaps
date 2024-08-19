@@ -21,7 +21,13 @@
                 <h:commandButton onclick="shiftDimension('#{dim}')" title="#{dim}" value="#{MapBean.normaliseDimensionName(dim)}" />
             </ui:repeat>
         </div>
-        <div id="mousePos"></div>
+        <div id="mousePos">
+            <p>
+                X: &nbsp;0
+                <br/>
+                Z: &nbsp;0
+            </p>
+        </div>
     </div>
 
     <div class="view" id="mapView"></div>
