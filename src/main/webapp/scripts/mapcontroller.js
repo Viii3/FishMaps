@@ -36,8 +36,8 @@ function renderMap () {
     horizontalTiles = Math.ceil(width / scaledStep);
     verticalTiles = Math.ceil(height / scaledStep);
 
-    topLeftX = Math.floor(currentX - scaledStep * Math.floor(horizontalTiles / 2));
-    topLeftZ = Math.floor(currentZ - scaledStep * Math.floor(verticalTiles / 2));
+    topLeftX = Math.floor(currentX - STEP * Math.floor(horizontalTiles / 2));
+    topLeftZ = Math.floor(currentZ - STEP * Math.floor(verticalTiles / 2));
     bottomRightX = topLeftX + horizontalTiles * scaledStep;
     bottomRightZ = topLeftZ + verticalTiles * scaledStep;
 
