@@ -1,3 +1,30 @@
 h1 {
     text-align: center;
 }
+
+.sideBar {
+    border: 10px;
+    border-color: orange;
+    z-index: 30;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    min-width: 75px;
+    max-width: fit-content;
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background-color: #ffa580;
+    text-align: center;
+}
+
+.sideBar a {
+    padding: 10px;
+    display: block;
+}
+
+.sideBar input {
+    width: 100%;
+    display: block;
+}
