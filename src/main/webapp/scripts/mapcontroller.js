@@ -1,15 +1,23 @@
+// Map Sizing
 var width = 1920;
 var height = 1080;
 const STEP = 32;
 
+// Tile Data
 var topLeftX = 0;
 var topLeftZ = 0;
+var bottomRightX = 1080;
+var bottomRightZ = 1920;
+var horizontalTiles = 0;
+var verticalTiles = 0;
 
+// Current Map Position
 var currentX = 0;
 var currentZ = 0;
 var dimension = "minecraft:overworld";
 var scale = 1;
 
+// Internals
 var playerData = [];
 var eventData = [];
 var socket;
@@ -25,20 +33,24 @@ function renderMap () {
     map.innerHTML = "";
 
     const scaledStep = Math.floor(STEP * scale);
-    const horizontalTiles = Math.ceil(width / scaledStep);
-    const verticalTiles = Math.ceil(height / scaledStep);
+    horizontalTiles = Math.ceil(width / scaledStep);
+    verticalTiles = Math.ceil(height / scaledStep);
 
     topLeftX = Math.floor(currentX - scaledStep * Math.floor(horizontalTiles / 2));
     topLeftZ = Math.floor(currentZ - scaledStep * Math.floor(verticalTiles / 2));
+    bottomRightX = topLeftX + horizontalTiles * scaledStep;
+    bottomRightZ = topLeftZ + verticalTiles * scaledStep;
+
     for (let z = 0; z < height / scale; z += STEP) {
         for (let x = 0; x < width / scale; x += STEP) {
-            let imageX = topLeftX + currentX + x;
-            let imageZ = topLeftZ + currentZ + z;
+            let imageX = topLeftX + x;
+            let imageZ = topLeftZ + z;
 
             let image = document.createElement("img");
             image.class = "mapTile";
-            image.id = "(" + imageX + "," + imageZ + ")"
-            image.style.cssText = "width:" + scaledStep + "px;height:" + scaledStep + "px;"
+            image.id = "(" + imageX + "," + imageZ + ")";
+            image.style.cssText = "width:" + scaledStep + "px;height:" + scaledStep + "px;";
+            image.draggable = false;
 
             let srcString = "images/map?x=" + imageX + "&z=" + imageZ + "&dimension=" + dimension + "&width=" + STEP + "&height=" + STEP + "&scale=" + scale;
             if (image.id in tileCache) srcString += "&time=" + tileCache[image.id]
@@ -86,18 +98,21 @@ function partialUpdateMap () {
 
 // TODO: Players are not rendered in the correct place and do not move properly with the map.
 function renderPlayers () {
+    const playerHeadHalfWidth = Math.floor(26 / 2);
     let playerView = document.getElementById("playerView");
     playerView.innerHTML = "";
 
     for (let player of playerData) {
-        let xPos = (player.x - topLeftX) * scale;
-        let zPos = (player.z - topLeftZ) * scale;
+        let xPos = (player.x - topLeftX) * scale + playerHeadHalfWidth;
+        let zPos = (player.z - topLeftZ) * scale + playerHeadHalfWidth;
 
         let playerHead = document.createElement("img");
         playerHead.className = "player";
         playerHead.style.top = "" + zPos + "px";
         playerHead.style.left = "" + xPos + "px";
         playerHead.src = "images/players?name=" + player.name;
+        playerHead.title = player.name;
+        playerHead.draggable = false;
         playerView.appendChild(playerHead);
     }
 }
@@ -106,7 +121,6 @@ function renderEvents () {
     let eventView = document.getElementById("eventView");
     eventView.innerHTML = "";
 
-    let scaledStep = Math.floor(STEP * scale);
     for (let event of eventData) {
         let xPos = (event.x - topLeftX) * scale;
         let zPos = (event.z - topLeftZ) * scale;
@@ -115,21 +129,16 @@ function renderEvents () {
         eventImg.className = "event";
         eventImg.style.top = "" + zPos + "px";
         eventImg.style.left = "" + xPos + "px";
-        eventImg.src = event.image;
+        eventImg.src = event.icon;
+        eventImg.title = event.message;
+        eventImg.draggable = false;
         eventView.appendChild(eventImg);
     }
 }
 
 async function updatePlayers () {
-    return;
-
-    const topLeftX = Math.floor(currentX - (width / 2));
-    const topLeftZ = Math.floor(currentZ - (height / 2));
-    const bottomRightX = Math.floor(currentX + ((width / 2) / scale));
-    const bottomRightZ = Math.floor(currentZ + ((height / 2) / scale));
-
     try {
-        let queryString = "/fishmaps/api/player/map?minX=" + topLeftX + "&maxX=" + bottomRightX + "&minZ=" + topLeftZ + "&maxZ=" + bottomRightZ + "&dimension=" + dimension;
+        let queryString = "/fishmaps/api/map/player?minX=" + topLeftX + "&maxX=" + bottomRightX + "&minZ=" + topLeftZ + "&maxZ=" + bottomRightZ + "&dimension=" + dimension;
         let response = await fetch(window.location.origin + queryString);
         playerData = await response.json();
     }
@@ -140,9 +149,17 @@ async function updatePlayers () {
     renderPlayers();
 }
 
-// TODO: Put events on the map.
 async function updateEvents () {
+    try {
+        let queryString = "/fishmaps/api/map/event?minX=" + topLeftX + "&maxX=" + bottomRightX + "&minZ=" + topLeftZ + "&maxZ=" + bottomRightZ + "&dimension=" + dimension;
+        let response = await fetch(window.location.origin + queryString);
+        eventData = await response.json();
+    }
+    catch {
+        eventData = [];
+    }
 
+    renderEvents();
 }
 
 function up () {
@@ -225,5 +242,5 @@ function startup () {
     }
 }
 
-//const playerUpdateIntervalID = setInterval(updatePlayers, 5000);
-//const eventUpdateIntervalID = setInterval(updateEvents, 10000);
+const playerUpdateIntervalID = setInterval(updatePlayers, 5000);
+const eventUpdateIntervalID = setInterval(updateEvents, 5000);
