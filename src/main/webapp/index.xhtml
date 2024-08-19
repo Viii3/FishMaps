@@ -14,7 +14,8 @@
     <div>
         Dimensions:<br/>
         <ui:repeat value="#{MapBean.dimensions}" var="dim">
-            <h:outputLink value="./map.xhtml?dimension=#{dim}">#{MapBean.normaliseDimensionName(dim)}</h:outputLink><br/>
+            <h:outputLink value="./map.xhtml?dimension=#{dim}">#{MapBean.normaliseDimensionName(dim)}</h:outputLink>
+            <br/>
         </ui:repeat>
     </div>
 </h:body>
