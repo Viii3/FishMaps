@@ -12,6 +12,10 @@ import java.io.Serializable;
 @Table(name = "Players")
 @NamedQueries({
     @NamedQuery(
+      name = Player.QUERY_ALL,
+      query = "SELECT p FROM Player p"
+    ),
+    @NamedQuery(
         name = Player.QUERY_COUNT,
         query = "SELECT COUNT(p) FROM Player p"
     ),
@@ -21,6 +25,7 @@ import java.io.Serializable;
     )
 })
 public class Player implements Serializable {
+    public static final String QUERY_ALL = "Player.all";
     public static final String QUERY_COUNT = "Player.count";
     public static final String QUERY_POSITION = "Player.position";
 

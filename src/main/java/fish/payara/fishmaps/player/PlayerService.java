@@ -44,4 +44,8 @@ public class PlayerService {
             .setParameter("dimension", dimension)
             .getResultList();
     }
+
+    public List<Player> getAll () {
+        return this.entityManager.createNamedQuery(Player.QUERY_ALL, Player.class).getResultList();
+    }
 }

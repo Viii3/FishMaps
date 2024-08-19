@@ -16,7 +16,8 @@ public class PlayerResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Player getPlayer (@QueryParam("name") String name) {
+    public Object getPlayer (@QueryParam("name") String name) {
+        if (name == null) return this.playerService.getAll();
         return this.playerService.get(name);
     }
 
