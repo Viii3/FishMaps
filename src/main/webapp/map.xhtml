@@ -12,13 +12,16 @@
     <link rel="stylesheet" href="styles/styles.css" />
 </h:head>
 <h:body onload="startup()">
-    <div class="sideBar">
-        <a href="./">Home</a>
-        <br/>
-        <p>Map Layers</p>
-        <ui:repeat value="#{MapBean.dimensions}" var="dim">
-            <h:commandButton onclick="shiftDimension('#{dim}')" title="#{dim}" value="#{MapBean.normaliseDimensionName(dim)}" />
-        </ui:repeat>
+    <div class="side">
+        <div class="sideBar">
+            <a href="./">Home</a>
+            <br/>
+            <p>Map Layers</p>
+            <ui:repeat value="#{MapBean.dimensions}" var="dim">
+                <h:commandButton onclick="shiftDimension('#{dim}')" title="#{dim}" value="#{MapBean.normaliseDimensionName(dim)}" />
+            </ui:repeat>
+        </div>
+        <div id="mousePos"></div>
     </div>
 
     <div class="view" id="mapView"></div>

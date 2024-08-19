@@ -47,7 +47,7 @@ function renderMap () {
             let imageZ = topLeftZ + z;
 
             let image = document.createElement("img");
-            image.class = "mapTile";
+            image.className = "mapTile";
             image.id = "(" + imageX + "," + imageZ + ")";
             image.style.cssText = "width:" + scaledStep + "px;height:" + scaledStep + "px;";
             image.draggable = false;
@@ -224,6 +224,17 @@ function updateURL () {
     window.history.replaceState(null, null, "map.xhtml?" + query.toString());
 }
 
+function trackMousePosition (mouseMoveEvent) {
+    let x = Math.floor(mouseMoveEvent.clientX / scale) + topLeftX;
+    let z = Math.floor(mouseMoveEvent.clientY / scale) + topLeftZ;
+
+    if (x > 0) x = "&nbsp;" + x;
+    if (z > 0) z = "&nbsp;" + z;
+
+    let tracker = document.getElementById("mousePos");
+    tracker.innerHTML = "<p>X: " + x + "<br/>Z: " + z + "</p>";
+}
+
 function parseIntParam (param) {
     let num = Number(param);
     if (num == NaN) return 0;
@@ -244,3 +255,4 @@ function startup () {
 
 const playerUpdateIntervalID = setInterval(updatePlayers, 5000);
 const eventUpdateIntervalID = setInterval(updateEvents, 5000);
+document.onmousemove = trackMousePosition;

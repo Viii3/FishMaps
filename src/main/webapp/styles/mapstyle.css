@@ -36,6 +36,20 @@
     height: 100%;
     width: 100%;
     margin: 0px;
+    top: 0px;
+    left: 0px;
+}
+
+#mousePos {
+    z-index: inherit;
+    height: fit-content;
+    width: fit-content;
+    min-width: 60px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+#mousePos p {
+    margin: 5px;
 }
 
 #mapView {
@@ -52,6 +66,7 @@
 }
 
 .player {
+    z-index: inherit;
     position: absolute;
     image-rendering: pixelated;
     width: 24px;
@@ -63,11 +78,11 @@
 }
 
 .player:hover {
-    width: 32px;
-    height: 32px;
+    transform: scale(1.5);
 }
 
 .event {
+    z-index: inherit;
     position: absolute;
     image-rendering: pixelated;
     width: 24px;
@@ -76,8 +91,7 @@
 }
 
 .event:hover {
-    width: 32px;
-    height: 32px;
+    transform: scale(1.5);
 }
 
 body {
