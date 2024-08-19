@@ -1,6 +1,7 @@
 package fish.payara.fishmaps.world;
 
 import fish.payara.fishmaps.event.EventService;
+import fish.payara.fishmaps.event.request.EventRequest;
 import fish.payara.fishmaps.player.PlayerRequest;
 import fish.payara.fishmaps.player.PlayerService;
 import fish.payara.fishmaps.world.block.Block;
@@ -41,7 +42,7 @@ public class MapResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/blocks")
+    @Path("/block/count")
     public long countBlocks (@QueryParam("dimension") String dimension) {
         if (dimension == null) return this.blockService.countBlocks();
         return this.blockService.countBlocks(dimension);
@@ -60,6 +61,13 @@ public class MapResource {
     @Path("/player")
     public List<PlayerRequest> getPlayers (@QueryParam("minX") int minX, @QueryParam("maxX") int maxX, @QueryParam("minZ") int minZ, @QueryParam("maxZ") int maxZ, @QueryParam("dimension") String dimension) {
         return this.playerService.get(minX, maxX, minZ, maxZ, dimension).stream().map(PlayerRequest::fromPlayer).toList();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/event")
+    public List<EventRequest> getEventsOnMap (@QueryParam("minX") int minX, @QueryParam("maxX") int maxX, @QueryParam("minZ") int minZ, @QueryParam("maxZ") int maxZ, @QueryParam("dimension") String dimension) {
+        return this.eventService.getEventsInArea(minX, maxX, minZ, maxZ, dimension).stream().map(EventRequest::fromEvent).toList();
     }
 
     @POST

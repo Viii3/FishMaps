@@ -3,13 +3,28 @@ package fish.payara.fishmaps.event;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 import java.io.Serializable;
 
 @Entity
 @Table(name = "EventParticipation")
+@NamedQueries({
+    @NamedQuery(
+        name = EventParticipation.QUERY_ALL,
+        query = "SELECT v FROM EventParticipation v"
+    ),
+    @NamedQuery(
+        name = EventParticipation.QUERY_GET_ENTRIES_FOR_EVENT,
+        query = "SELECT v FROM EventParticipation v WHERE v.eventId = :id"
+    )
+})
 public class EventParticipation implements Serializable {
+    public static final String QUERY_ALL = "EventParticipation.all";
+    public static final String QUERY_GET_ENTRIES_FOR_EVENT = "EventParticipation.getPlayers";
+
     @Id @GeneratedValue
     private long id;
     private long eventId;

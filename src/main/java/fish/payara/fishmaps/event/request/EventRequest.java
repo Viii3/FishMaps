@@ -1,8 +1,11 @@
-package fish.payara.fishmaps.event;
+package fish.payara.fishmaps.event.request;
 
+import fish.payara.fishmaps.event.Event;
+import fish.payara.fishmaps.event.IconEnum;
 import fish.payara.fishmaps.world.block.Block;
 
 import java.io.Serializable;
+import java.time.Instant;
 
 public class EventRequest implements Serializable {
     private int x, y, z;
@@ -15,7 +18,18 @@ public class EventRequest implements Serializable {
     }
 
     public Event toEvent () {
-        return new Event(this.message, this.icon, this.x, this. z, this.dimension);
+        return new Event(Instant.now().toEpochMilli(), this.message, this.getIconImage(), this.x, this.z, this.dimension);
+    }
+
+    public static EventRequest fromEvent (Event event) {
+        EventRequest request = new EventRequest();
+        Block location = Block.fromDescriptor(event.getLocation());
+        request.setDimension(location.getDimension());
+        request.setX(location.getX());
+        request.setZ(location.getZ());
+        request.setIcon(event.getIcon());
+        request.setMessage(event.getMessage());
+        return request;
     }
 
     public String getLocation () {
@@ -68,5 +82,14 @@ public class EventRequest implements Serializable {
 
     public void setIcon (String icon) {
         this.icon = icon;
+    }
+
+    public String getIconImage () {
+        try {
+            return IconEnum.valueOf(this.icon.toUpperCase()).fileName;
+        }
+        catch (Exception e) {
+            return this.icon;
+        }
     }
 }
