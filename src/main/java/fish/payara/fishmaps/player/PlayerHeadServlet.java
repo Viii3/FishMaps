@@ -1,6 +1,7 @@
 package fish.payara.fishmaps.player;
 
 import jakarta.inject.Inject;
+import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -10,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -25,6 +27,8 @@ import java.util.logging.Logger;
 public class PlayerHeadServlet extends HttpServlet {
     private static final String NAME_LOOKUP = "https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname";
     private static final String PROFILE_LOOKUP = "https://sessionserver.mojang.com/session/minecraft/profile/";
+
+    private static BufferedImage defaultImage;
 
     @Inject
     PlayerCache cache;
@@ -47,7 +51,7 @@ public class PlayerHeadServlet extends HttpServlet {
             try {
                 HttpResponse<String> uuidResponse = client.send(getUUID, HttpResponse.BodyHandlers.ofString());
                 String uuidBody = uuidResponse.body();
-                String uuid = "";
+                String uuid;
                 if (uuidBody.contains("\"id\"")) {
                     int idIndex = uuidBody.indexOf("\"id\"");
                     int startOfUUID = uuidBody.indexOf('"', idIndex + 4);
@@ -55,8 +59,9 @@ public class PlayerHeadServlet extends HttpServlet {
                     uuid = uuidBody.substring(startOfUUID + 1, endOfUUID);
                 }
                 else {
-                    this.cache.put(name, image);
-                    this.end(image, resp);
+                    logger.log(Level.INFO, "Could not find API data for " + name + ", using default image");
+                    this.cache.put(name, this.getDefaultImage(req.getServletContext()));
+                    this.end(this.getDefaultImage(req.getServletContext()), resp);
                     return;
                 }
 
@@ -75,8 +80,9 @@ public class PlayerHeadServlet extends HttpServlet {
                     skinURL = decoded.substring(urlStartIndex, decoded.indexOf('"', urlStartIndex));
                 }
                 else {
-                    this.cache.put(name, image);
-                    this.end(image, resp);
+                    logger.log(Level.INFO, "Could not find API data for " + name + ", using default image");
+                    this.cache.put(name, this.getDefaultImage(req.getServletContext()));
+                    this.end(this.getDefaultImage(req.getServletContext()), resp);
                     return;
                 }
 
@@ -102,6 +108,21 @@ public class PlayerHeadServlet extends HttpServlet {
         }
 
         this.end(image, resp);
+    }
+
+    private BufferedImage getDefaultImage (ServletContext context) {
+        if (defaultImage != null) return defaultImage;
+
+        String path = context.getRealPath("images/unknown_player.png");
+        File imageFile = new File(path);
+
+        try {
+            defaultImage = ImageIO.read(imageFile);
+        }
+        catch (IOException e) {
+            defaultImage = new BufferedImage(16, 16, BufferedImage.TYPE_INT_RGB);
+        }
+        return defaultImage;
     }
 
     private void end (BufferedImage image, HttpServletResponse resp) throws IOException {
