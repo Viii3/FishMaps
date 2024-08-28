@@ -3,6 +3,10 @@ var width = 1920;
 var height = 1080;
 const STEP = 32;
 
+// Icon Sizing
+const playerHeadHalfWidth = Math.floor(24 / 2);
+const eventIconHalfWidth = Math.floor(24 / 2);
+
 // Tile Data
 var topLeftX = 0;
 var topLeftZ = 0;
@@ -60,8 +64,8 @@ function renderMap () {
         }
         map.appendChild(document.createElement("br"));
     }
-    renderPlayers();
-    renderEvents();
+    resetPlayers();
+    resetEvents();
 }
 
 function updateMapCache (blockX, blockZ) {
@@ -96,10 +100,26 @@ function partialUpdateMap () {
     }
 }
 
-function renderPlayers () {
-    const playerHeadHalfWidth = Math.floor(24 / 2);
+function addPlayerToMap (player) {
+    if (player.dimension != dimension) return;
+
     let playerView = document.getElementById("playerView");
-    playerView.innerHTML = "";
+    let xPos = (player.x - topLeftX) * scale - playerHeadHalfWidth;
+    let zPos = (player.z - topLeftZ) * scale - playerHeadHalfWidth;
+
+    let playerHead = document.createElement("img");
+    playerHead.id = player.name;
+    playerHead.className = "player";
+    playerHead.style.top = "" + zPos + "px";
+    playerHead.style.left = "" + xPos + "px";
+    playerHead.src = "images/players?name=" + player.name;
+    playerHead.title = player.name;
+    playerHead.draggable = false;
+    playerView.appendChild(playerHead);
+}
+
+function movePlayers () {
+    let playerView = document.getElementById("playerView");
 
     for (let player of playerData) {
         if (player.dimension != dimension) continue;
@@ -107,36 +127,57 @@ function renderPlayers () {
         let xPos = (player.x - topLeftX) * scale - playerHeadHalfWidth;
         let zPos = (player.z - topLeftZ) * scale - playerHeadHalfWidth;
 
-        let playerHead = document.createElement("img");
-        playerHead.className = "player";
-        playerHead.style.top = "" + zPos + "px";
-        playerHead.style.left = "" + xPos + "px";
-        playerHead.src = "images/players?name=" + player.name;
-        playerHead.title = player.name;
-        playerHead.draggable = false;
-        playerView.appendChild(playerHead);
+        let playerHead = document.getElementById(player.name);
+        if (playerHead == null) {
+            addPlayerToMap(player);
+            continue;
+        }
+
+        playerHead.style.top = xPos;
+        playerHead.style.left = zPos;
     }
 }
 
-function renderEvents () {
-    const eventIconHalfWidth = Math.floor(24 / 2);
+function resetPlayers () {
+    let playerView = document.getElementById("playerView");
+    playerView.innerHTML = "";
+
+    for (let player of playerData) {
+        addPlayerToMap(player);
+    }
+}
+
+function addEventToMap (event) {
+    let eventView = document.getElementById("eventView");
+
+    if (event.dimension != dimension) return;
+    let xPos = (event.x - topLeftX) * scale - eventIconHalfWidth;
+    let zPos = (event.z - topLeftZ) * scale - eventIconHalfWidth;
+
+    let eventImg = document.createElement("img");
+    eventImg.id = "" + event.timestamp + "-" + event.message.replaceAll(" ", "");
+    eventImg.className = "event";
+    eventImg.style.top = "" + zPos + "px";
+    eventImg.style.left = "" + xPos + "px";
+    eventImg.src = event.icon;
+    eventImg.title = event.message;
+    eventImg.draggable = false;
+    eventView.appendChild(eventImg);
+}
+
+function addNewEventsToMap () {
+    for (let event of eventData) {
+        if (document.getElementById("" + event.timestamp + "-" + event.message.replaceAll(" ", "")) == null)
+            addEventToMap(event);
+    }
+}
+
+function resetEvents () {
     let eventView = document.getElementById("eventView");
     eventView.innerHTML = "";
 
     for (let event of eventData) {
-        if (event.dimension != dimension) continue;
-
-        let xPos = (event.x - topLeftX) * scale - eventIconHalfWidth;
-        let zPos = (event.z - topLeftZ) * scale - eventIconHalfWidth;
-
-        let eventImg = document.createElement("img");
-        eventImg.className = "event";
-        eventImg.style.top = "" + zPos + "px";
-        eventImg.style.left = "" + xPos + "px";
-        eventImg.src = event.icon;
-        eventImg.title = event.message;
-        eventImg.draggable = false;
-        eventView.appendChild(eventImg);
+        addEventToMap(event);
     }
 }
 
@@ -150,7 +191,7 @@ async function updatePlayers () {
         playerData = [];
     }
 
-    renderPlayers();
+    movePlayers();
 }
 
 async function updateEvents () {
@@ -163,7 +204,7 @@ async function updateEvents () {
         eventData = [];
     }
 
-    renderEvents();
+    addNewEventsToMap();
 }
 
 function up () {
