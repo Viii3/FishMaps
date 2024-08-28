@@ -1,3 +1,7 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 h1 {
     text-align: center;
 }
@@ -10,25 +14,53 @@ h1 {
 }
 
 .sideBar {
+    display: flex;
     flex: 1;
     z-index: inherit;
     top: 0px;
     left: 0px;
     height: 100%;
-    min-width: 80px;
+    width: 40px;
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
     background-color: #ffa580;
     text-align: center;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
 }
 
-.sideBar a {
+.sideBar:hover {
+    width: 200px;
+}
+
+.sidePreview {
+    width: 40px;
+    height: 100%;
+    background-color: #e8845d;
+    z-index: inherit;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.sideFullView {
+    text-align: center;
+    z-index: inherit;
+    margin-left: 40px;
+    text-wrap: nowrap;
+}
+
+.sideFullView a {
     padding: 10px;
     display: block;
 }
 
-.sideBar input {
-    width: 100%;
+.sideFullView input {
+    width: 80px;
     display: block;
+}
+
+.burgerIcon {
+    image-rendering: pixelated;
+    margin-top: 4px;
 }

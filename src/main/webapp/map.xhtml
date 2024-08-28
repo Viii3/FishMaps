@@ -14,12 +14,16 @@
 <h:body onload="startup()">
     <div class="side">
         <div class="sideBar">
-            <a href="./">Home</a>
-            <br/>
-            <p>Map Layers</p>
-            <ui:repeat value="#{MapBean.dimensions}" var="dim">
-                <h:commandButton onclick="shiftDimension('#{dim}')" title="#{dim}" value="#{MapBean.normaliseDimensionName(dim)}" />
-            </ui:repeat>
+            <div class="sidePreview">
+                <img class="burgerIcon" src="images/burger.png" />
+            </div>
+            <div class="sideFullView">
+                <p><a href="./">Home</a></p>
+                <p>Map Layers</p>
+                <ui:repeat value="#{MapBean.dimensions}" var="dim">
+                    <h:commandButton onclick="shiftDimension('#{dim}')" title="#{dim}" value="#{MapBean.normaliseDimensionName(dim)}" />
+                </ui:repeat>
+            </div>
         </div>
         <div id="mousePos">
             <p>
