@@ -10,7 +10,7 @@ import java.util.List;
 @RequestScoped
 public class MapBean {
     @EJB
-    BlockService service;
+    private BlockService service;
 
     public String createMapUrl (String dimension) {
         return "./map.xhtml?dimension=" + dimension;
