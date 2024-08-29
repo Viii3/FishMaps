@@ -50,6 +50,7 @@
 
 #mousePos p {
     margin: 5px;
+    color: black;
 }
 
 #mapView {
@@ -75,6 +76,7 @@
     border-width: 2px;
     border-color: black;
     transition: 0.25s ease;
+    cursor: pointer;
 }
 
 .player:hover {

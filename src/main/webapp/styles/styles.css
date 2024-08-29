@@ -1,5 +1,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    background-color: #272727;
 }
 
 h1 {
@@ -8,9 +10,11 @@ h1 {
 
 .side {
     display: flex;
-    position: absolute;
+    position: fixed;
     height: 100%;
     z-index: 30;
+    top: 0px;
+    left: 0px;
 }
 
 .sideBar {
@@ -51,13 +55,19 @@ h1 {
 }
 
 .sideFullView a {
-    padding: 10px;
+    padding: 2px 6px 2px 6px;
     display: block;
+    border-style: solid;
+    border-radius: 2px;
+    border-width: 2px;
+    background-color: gray;
+    color: white;
+    text-decoration: none;
 }
 
-.sideFullView input {
-    width: 80px;
-    display: block;
+.sideFullView a:visited {
+    color: white;
+    text-decoration: none;
 }
 
 .burgerIcon {
