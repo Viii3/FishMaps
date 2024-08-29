@@ -25,13 +25,16 @@ public class BlockService {
     }
 
     public List<Block> getBlocksInRange (int minX, int maxX, int minZ, int maxZ, String dimension) {
-        return this.entityManager.createNamedQuery(Block.QUERY_BLOCKS_IN_RANGE, Block.class)
+        List<Block> blocks = this.entityManager.createNamedQuery(Block.QUERY_BLOCKS_IN_RANGE, Block.class)
             .setParameter("minX", minX)
             .setParameter("maxX", maxX)
             .setParameter("minZ", minZ)
             .setParameter("maxZ", maxZ)
             .setParameter("dimension", dimension)
             .getResultList();
+
+        this.clearContext();
+        return blocks;
     }
 
     public long countBlocks () {
@@ -80,6 +83,8 @@ public class BlockService {
             this.entityManager.flush();
             this.entityManager.persist(block);
         }
+
+        this.clearContext();
     }
 
     public void add (@Observes BlockEvent event) {
@@ -88,5 +93,10 @@ public class BlockService {
 
     public List<String> getDimensions () {
         return this.entityManager.createNamedQuery(Block.QUERY_DIMENSION_LIST, String.class).getResultList();
+    }
+
+    private void clearContext () {
+        this.entityManager.flush();
+        this.entityManager.clear();
     }
 }

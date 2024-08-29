@@ -1,0 +1,29 @@
+.profile {
+    margin: auto;
+    width: 75vw;
+}
+
+#mapPreview {
+    width: fit-content;
+}
+
+#mapPreview img {
+    image-rendering: pixelated;
+    cursor: pointer;
+    transition-duration: 0.25s;
+    transition-timing-function: ease;
+}
+
+#mapPreview img:hover {
+    transform: scale(1.1);
+}
+
+#profileImage {
+    image-rendering: pixelated;
+    width: 25%;
+    flex-shrink: 0;
+}
+
+.row1 {
+    display: flex;
+}

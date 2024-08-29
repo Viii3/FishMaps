@@ -1,0 +1,32 @@
+.profilePlayerHead {
+    image-rendering: pixelated;
+    width: 94px;
+}
+
+.listItem {
+    display: flex;
+    padding: 10px;
+    min-width: fit-content;
+    width: 75vw;
+    border-width: 2px;
+    border-style: groove;
+    border-color: orange;
+    border-radius: 5px;
+    text-align: center;
+    margin: auto;
+    transition: 0.25s ease;
+    background-color: #393939;
+    cursor: pointer;
+    line-height: 75%;
+}
+
+.listItem:hover {
+    transform: scale(1.05);
+}
+
+.profileText {
+    flex-grow: 1;
+    font-size: large;
+    padding-left: 20px;
+    text-align: left;
+}

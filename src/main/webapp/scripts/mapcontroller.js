@@ -115,12 +115,13 @@ function addPlayerToMap (player) {
     playerHead.src = "images/players?name=" + player.name;
     playerHead.title = player.name;
     playerHead.draggable = false;
+    playerHead.onclick = () => {
+        window.location.href = "profile.xhtml?player=" + player.name;
+    }
     playerView.appendChild(playerHead);
 }
 
 function movePlayers () {
-    let playerView = document.getElementById("playerView");
-
     for (let player of playerData) {
         if (player.dimension != dimension) continue;
 
