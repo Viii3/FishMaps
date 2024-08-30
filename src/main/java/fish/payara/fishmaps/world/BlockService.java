@@ -2,6 +2,7 @@ package fish.payara.fishmaps.world;
 
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockEvent;
+import fish.payara.fishmaps.world.block.BlockListEvent;
 import fish.payara.fishmaps.world.block.Chunk;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Observes;
@@ -83,12 +84,18 @@ public class BlockService {
             this.entityManager.flush();
             this.entityManager.persist(block);
         }
-
-        this.clearContext();
     }
 
     public void add (@Observes BlockEvent event) {
         this.add(event.block());
+        this.clearContext();
+    }
+
+    public void add (@Observes BlockListEvent event) {
+        for (Block block : event.blocks()) {
+            this.add(block);
+        }
+        this.clearContext();
     }
 
     public List<String> getDimensions () {

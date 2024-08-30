@@ -6,6 +6,7 @@ import fish.payara.fishmaps.player.PlayerRequest;
 import fish.payara.fishmaps.player.PlayerService;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockEvent;
+import fish.payara.fishmaps.world.block.BlockListEvent;
 import fish.payara.fishmaps.world.block.Chunk;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
@@ -31,7 +32,10 @@ public class MapResource {
     private EventService eventService;
 
     @Inject
-    private Event<BlockEvent> event;
+    private Event<BlockEvent> blockEvent;
+
+    @Inject
+    private Event<BlockListEvent> blockListEvent;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -75,6 +79,14 @@ public class MapResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/block")
     public void postBlock (BlockRequest request) {
-        this.event.fire(new BlockEvent(request.toBlock()));
+        this.blockEvent.fire(new BlockEvent(request.toBlock()));
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/block/multiple")
+    public void postBlocks (List<BlockRequest> blocks) {
+        this.blockListEvent.fire(new BlockListEvent(blocks.stream().map(BlockRequest::toBlock).toList()));
     }
 }

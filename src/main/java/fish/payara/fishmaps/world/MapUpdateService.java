@@ -2,6 +2,7 @@ package fish.payara.fishmaps.world;
 
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockEvent;
+import fish.payara.fishmaps.world.block.BlockListEvent;
 import fish.payara.fishmaps.world.websocket.ChunkMessage;
 import fish.payara.fishmaps.world.websocket.MapUpdateWebSocket;
 import jakarta.annotation.PostConstruct;
@@ -35,8 +36,12 @@ public class MapUpdateService {
     }
 
     public void blockUpdate (@Observes BlockEvent event) {
-        Block block = event.block();
-        this.updatedChunks.add(block.getChunkDescriptor());
+        this.updatedChunks.add(event.block().getChunkDescriptor());
+    }
+
+    public void blockUpdate (@Observes BlockListEvent event) {
+        List<String> chunkDescriptors = event.blocks().stream().map(Block::getChunkDescriptor).toList();
+        this.updatedChunks.addAll(chunkDescriptors);
     }
 
     @Timeout
