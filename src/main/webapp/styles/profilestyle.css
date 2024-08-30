@@ -1,10 +1,17 @@
 .profile {
     margin: auto;
+    margin-top: 50px;
     width: 75vw;
 }
 
 #mapPreview {
     width: fit-content;
+    float: right;
+    line-height: 0;
+}
+
+#mapPreview h2 {
+    text-align: center;
 }
 
 #mapPreview img {
@@ -20,10 +27,39 @@
 
 #profileImage {
     image-rendering: pixelated;
-    width: 25%;
     flex-shrink: 0;
+    width: 200px;
+    height: 200px;
+}
+
+#profileInfo {
+    margin-left: 20px;
+}
+
+.playerSection {
+    flex-grow: 1;
+    display: flex;
 }
 
 .row1 {
     display: flex;
+}
+
+table {
+    width: 100%;
+}
+
+td, th {
+    text-align: center;
+    border-color: white;
+    background-color: #954627;
+}
+
+th {
+    border-style: double;
+}
+
+td {
+    border-style: solid;
+    border-width: 1px;
 }

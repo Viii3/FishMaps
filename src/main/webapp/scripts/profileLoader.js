@@ -1,4 +1,5 @@
 const INVALID_PLAYER = "Invalid Player";
+const MAP_BLOCK_WIDTH = 128;
 
 var currentPlayer = INVALID_PLAYER;
 var x = 0;
@@ -10,22 +11,17 @@ function loadProfile () {
     image.src = "images/players?name=" + currentPlayer;
 
     let mapPreview = document.getElementById("mapPreview");
-    mapPreview.innerHTML = "";
-    mapPreview.onclick = () => {
-        window.location.href = "map.xhtml?x=" + x + "&z=" + z + "&dimension=" + dimension;
-    }
-
+    let mapX = Math.floor(x - MAP_BLOCK_WIDTH / 2);
+    let mapZ = Math.floor(z - MAP_BLOCK_WIDTH / 2);
     let mapImage = document.createElement("img");
     mapImage.id = "map";
-    mapImage.src = "images/map?x=" + (x - 64) + "&z=" + (z - 64) + "&dimension=" + dimension + "&width=128&height=128&scale=1";
-    
+    mapImage.alt = "Map of " + currentPlayer + "'s position"
+    mapImage.src = "images/map?x=" + mapX + "&z=" + mapZ + "&dimension=" + dimension + "&width=" + MAP_BLOCK_WIDTH + "&height=" + MAP_BLOCK_WIDTH + "&scale=2";
+    mapImage.title = "Go to map"
+    mapImage.onclick = () => {
+        window.location.href = "map.xhtml?x=" + x + "&z=" + z + "&dimension=" + dimension;
+    }
     mapPreview.appendChild(mapImage);
-
-    let profileView = document.getElementById("profileInfo");
-    profileView.innerHTML = "";
-    let playerName = document.createElement("h2");
-    playerName.textContent = currentPlayer;
-    profileView.appendChild(playerName);
 }
 
 async function getPlayerData () {

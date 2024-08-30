@@ -28,6 +28,10 @@ import java.io.Serializable;
     @NamedQuery(// This relies on the associated block existing, which is maybe not ideal.
         name = Event.QUERY_LOCATION,
         query = "SELECT e FROM Event e INNER JOIN Block b ON e.location = b.descriptor WHERE b.dimension = :dimension AND b.x >= :minX AND b.x <= :maxX AND b.z >= :minZ AND b.z <= :maxZ"
+    ),
+    @NamedQuery(
+        name = Event.QUERY_PLAYER,
+        query = "SELECT e FROM Event e INNER JOIN EventParticipation v ON e.id = v.eventId WHERE v.playerName = :playerName"
     )
 })
 public class Event implements Serializable {
@@ -35,6 +39,7 @@ public class Event implements Serializable {
     public static final String QUERY_COUNT = "Event.count";
     public static final String QUERY_TIME_PERIOD = "Event.period";
     public static final String QUERY_LOCATION = "Event.location";
+    public static final String QUERY_PLAYER = "Event.player";
 
     @Id @GeneratedValue
     private long id;

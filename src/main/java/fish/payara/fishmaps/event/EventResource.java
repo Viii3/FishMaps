@@ -1,6 +1,7 @@
 package fish.payara.fishmaps.event;
 
 import fish.payara.fishmaps.event.request.EventFullRequest;
+import fish.payara.fishmaps.event.request.EventOutputRequest;
 import fish.payara.fishmaps.event.request.ParticipantRequest;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -46,5 +47,12 @@ public class EventResource {
     public Object getEventParticipation (@QueryParam("eventId") Long eventId) {
         if (eventId == null) return this.eventService.getAllEventParticipants();
         return this.eventService.getParticipatingPlayers(eventId);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/player")
+    public List<EventOutputRequest> getEventsForPlayer (@QueryParam("name") String playerName) {
+        return this.eventService.getEventsForPlayer(playerName).stream().map(EventOutputRequest::fromEvent).toList();
     }
 }

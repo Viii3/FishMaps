@@ -29,12 +29,45 @@
     </div>
     <div class="profile">
         <div class="row1">
-            <img id="profileImage" src="images/unknown_player.png" alt="Player preview." />
-            <div id="profileInfo"></div>
-            <div id="mapPreview"></div>
+            <div class="playerSection">
+                <h:graphicImage id="profileImage" url="images/players?name=#{param.player}" alt="Player preview." />
+                <div id="profileInfo">
+                    <h2>#{param.player}</h2>
+                    <h3>Status: #{PlayerBean.getOnlineStatus(param.player)}</h3>
+                </div>
+            </div>
+            <div id="mapPreview">
+                <h2>Location: #{PlayerBean.getCoordinates(param.player)}</h2>
+            </div>
         </div>
         <div class="row2">
-
+            <h2>Events</h2>
+            <h:dataTable value="#{PlayerBean.getEvents(param.player)}" var="playerEvent">
+                <h:column>
+                    <f:facet name="header">Icon</f:facet>
+                    <h:graphicImage url="#{playerEvent.getIconImage()}" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Message</f:facet>
+                    #{playerEvent.message}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">X</f:facet>
+                    #{playerEvent.x}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Z</f:facet>
+                    #{playerEvent.z}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Dimension</f:facet>
+                    #{MapBean.normaliseDimensionName(playerEvent.dimension)}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Time</f:facet>
+                    #{TimeBean.formatMillis(playerEvent.timestamp)}
+                </h:column>
+            </h:dataTable>
         </div>
     </div>
 </h:body>

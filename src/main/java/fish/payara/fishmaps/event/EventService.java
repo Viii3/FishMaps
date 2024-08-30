@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.event;
 
+import fish.payara.fishmaps.event.request.EventOutputRequest;
 import jakarta.ejb.Stateless;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -67,6 +68,12 @@ public class EventService {
             .setParameter("minZ", minZ)
             .setParameter("maxZ", maxZ)
             .setParameter("dimension", dimension)
+            .getResultList();
+    }
+
+    public List<Event> getEventsForPlayer (String playerName) {
+        return this.entityManager.createNamedQuery(Event.QUERY_PLAYER, Event.class)
+            .setParameter("playerName", playerName)
             .getResultList();
     }
 }
