@@ -12,3 +12,6 @@ A mapping tool, that uses Payara Server and Jakarta EE to display a live Minecra
 - Postgres Database
   - Storing every individual pixel for the map.
   - Storing player and event locations.
+
+## Associated Application
+Data can be fed into FishMaps by any application, but it is intended for use with the [FishMaps Minecraft mod](https://github.com/Viii3/FishMaps-Client).
