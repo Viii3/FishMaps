@@ -29,6 +29,12 @@ var socket;
 var shouldUpdateMap = false;
 var tileCache = {};
 
+function renderAll () {
+    renderMap();
+    resetPlayers();
+    resetEvents();
+}
+
 function renderMap () {
     width = window.outerWidth;
     height = window.outerHeight;
@@ -64,8 +70,6 @@ function renderMap () {
         }
         map.appendChild(document.createElement("br"));
     }
-    resetPlayers();
-    resetEvents();
 }
 
 function updateMapCache (blockX, blockZ) {
@@ -90,7 +94,7 @@ function parseWebsockList (dataList) {
         }
     }
 
-    if (shouldUpdateMap) renderMap();
+    partialUpdateMap();
 }
 
 function partialUpdateMap () {
@@ -211,36 +215,36 @@ async function updateEvents () {
 function up () {
     currentZ -= STEP;
     updateURL();
-    renderMap();
+    renderAll();
 }
 
 function down () {
     currentZ += STEP;
     updateURL();
-    renderMap();
+    renderAll();
 }
 
 function left () {
     currentX -= STEP;
     updateURL();
-    renderMap();
+    renderAll();
 }
 
 function right () {
     currentX += STEP;
     updateURL();
-    renderMap();
+    renderAll();
 }
 
 function zoomIn () {
     ++scale;
-    renderMap();
+    renderAll();
 }
 
 function zoomOut () {
     if (scale > 1) {
         --scale;
-        renderMap();
+        renderAll();
     }
 }
 
@@ -249,7 +253,7 @@ function shiftDimension (newDimension) {
         dimension = newDimension;
         tileCache = {};
         updateURL();
-        renderMap();
+        renderAll();
     }
 }
 
@@ -290,7 +294,7 @@ function parseIntParam (param) {
 function startup () {
     parseURL();
     updateURL();
-    renderMap();
+    renderAll();
 
     socket = new WebSocket("ws://" + document.location.host + "/fishmaps/update/map");
     socket.onmessage = function (event) {
