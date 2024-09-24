@@ -3,7 +3,6 @@ package fish.payara.fishmaps.player;
 import fish.payara.fishmaps.event.EventService;
 import fish.payara.fishmaps.event.request.EventOutputRequest;
 import fish.payara.fishmaps.util.TimeBean;
-import fish.payara.fishmaps.world.block.Block;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -49,8 +48,6 @@ public class PlayerBean {
     public String getCoordinates (String playerName) {
         Player player = this.playerService.get(playerName);
         if (player == null) return "(0, 0)";
-
-        Block location = Block.fromDescriptor(player.getLocation());
-        return "(" + location.getX() + ", " + location.getZ() + ")";
+        return "(" + player.getX() + ", " + player.getZ() + ")";
     }
 }

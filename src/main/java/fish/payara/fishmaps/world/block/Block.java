@@ -1,12 +1,12 @@
 package fish.payara.fishmaps.world.block;
 
+import fish.payara.fishmaps.util.AbstractCoordinateHolder;
+import jakarta.persistence.Cacheable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-
-import java.io.Serializable;
 
 @Entity
 @Table(name = "blocks")
@@ -28,7 +28,7 @@ import java.io.Serializable;
         query = "SELECT COUNT(b) FROM Block b WHERE b.dimension = :dimension"
     )
 })
-public class Block implements Serializable {
+public class Block extends AbstractCoordinateHolder {
     public static final String QUERY_BLOCKS_IN_RANGE = "Block.blocksInRange";
     public static final String QUERY_DIMENSION_LIST = "Block.getAllDimensions";
     public static final String QUERY_BLOCK_COUNT = "Block.getBlockCount";
@@ -36,22 +36,15 @@ public class Block implements Serializable {
 
     @Id
     private String descriptor;
-    private int x;
-    private int y;
-    private int z;
-    private String dimension;
     private int colour;
 
     public Block () {
-
+        super();
     }
 
     public Block (int x, int y, int z, String dimension, int colour) {
+        super(x, y, z, dimension);
         this.descriptor = Block.getDescriptor(x, z, dimension);
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.dimension = dimension;
         this.colour = colour;
     }
 
@@ -72,36 +65,12 @@ public class Block implements Serializable {
         return block;
     }
 
-    public int getChunkX () {
-        return (this.x / Chunk.CHUNK_LENGTH) - (this.x < 0 ? 1 : 0);
-    }
-
-    public int getChunkZ () {
-        return (this.z / Chunk.CHUNK_LENGTH) - (this.z < 0 ? 1 : 0);
-    }
-
     public String getChunkDescriptor () {
-        return Block.getDescriptor(this.getChunkX(), this.getChunkZ(), this.dimension);
+        return Block.getDescriptor(this.getChunkX(), this.getChunkZ(), this.getDimension());
     }
 
     public String getDescriptor () {
         return this.descriptor;
-    }
-
-    public int getX () {
-        return this.x;
-    }
-
-    public int getY () {
-        return this.y;
-    }
-
-    public int getZ () {
-        return this.z;
-    }
-
-    public String getDimension () {
-        return this.dimension;
     }
 
     public int getColour () {
@@ -110,22 +79,6 @@ public class Block implements Serializable {
 
     public void setDescriptor (String descriptor) {
         this.descriptor = descriptor;
-    }
-
-    public void setX (int x) {
-        this.x = x;
-    }
-
-    public void setY (int y) {
-        this.y = y;
-    }
-
-    public void setZ (int z) {
-        this.z = z;
-    }
-
-    public void setDimension (String dimension) {
-        this.dimension = dimension;
     }
 
     public void setColour (int colour) {

@@ -18,17 +18,16 @@ public class EventRequest implements Serializable {
     }
 
     public EventRequest (Event event) {
-        Block location = Block.fromDescriptor(event.getLocation());
-        this.x = location.getX();
-        this.y = location.getY();
-        this.z = location.getZ();
-        this.dimension = location.getDimension();
+        this.x = event.getX();
+        this.y = event.getY();
+        this.z = event.getZ();
+        this.dimension = event.getDimension();
         this.icon = event.getIcon();
         this.message = event.getMessage();
     }
 
     public Event toEvent () {
-        return new Event(Instant.now().toEpochMilli(), this.message, this.getIconImage(), this.x, this.z, this.dimension);
+        return new Event(Instant.now().toEpochMilli(), this.message, this.getIconImage(), this.x, this.y, this.z, this.dimension);
     }
 
     public static EventRequest fromEvent (Event event) {

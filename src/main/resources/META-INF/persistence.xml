@@ -4,6 +4,9 @@
         <jta-data-source>
             jdbc/local-postgres
         </jta-data-source>
+        <shared-cache-mode>
+            NONE
+        </shared-cache-mode>
         <properties>
             <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
             <property name="eclipse.logging.level" value="FINEST"/>

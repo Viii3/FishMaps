@@ -1,14 +1,12 @@
 package fish.payara.fishmaps.event;
 
-import fish.payara.fishmaps.world.block.Block;
+import fish.payara.fishmaps.util.AbstractCoordinateHolder;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
-
-import java.io.Serializable;
 
 @Entity
 @Table(name = "Events")
@@ -25,16 +23,16 @@ import java.io.Serializable;
         name = Event.QUERY_TIME_PERIOD,
         query = "SELECT e FROM Event e WHERE e.timeStamp >= :after AND e.timeStamp <= :before"
     ),
-    @NamedQuery(// This relies on the associated block existing, which is maybe not ideal.
+    @NamedQuery(
         name = Event.QUERY_LOCATION,
-        query = "SELECT e FROM Event e INNER JOIN Block b ON e.location = b.descriptor WHERE b.dimension = :dimension AND b.x >= :minX AND b.x <= :maxX AND b.z >= :minZ AND b.z <= :maxZ"
+        query = "SELECT e FROM Event e WHERE e.dimension = :dimension AND e.x >= :minX AND e.x <= :maxX AND e.z >= :minZ AND e.z <= :maxZ"
     ),
     @NamedQuery(
         name = Event.QUERY_PLAYER,
         query = "SELECT e FROM Event e INNER JOIN EventParticipation v ON e.id = v.eventId WHERE v.playerName = :playerName"
     )
 })
-public class Event implements Serializable {
+public class Event extends AbstractCoordinateHolder {
     public static final String QUERY_ALL = "Event.all";
     public static final String QUERY_COUNT = "Event.count";
     public static final String QUERY_TIME_PERIOD = "Event.period";
@@ -46,17 +44,16 @@ public class Event implements Serializable {
     private long timeStamp;
     private String message;
     private String icon;
-    private String location;
 
     public Event () {
-
+        super();
     }
 
-    public Event (long timeStamp, String message, String icon, int x, int z, String dimension) {
+    public Event (long timeStamp, String message, String icon, int x, int y, int z, String dimension) {
+        super(x, y, z, dimension);
         this.timeStamp = timeStamp;
         this.message = message;
         this.icon = icon;
-        this.location = Block.getDescriptor(x, z, dimension);
     }
 
     public long getId () {
@@ -75,10 +72,6 @@ public class Event implements Serializable {
         return this.icon;
     }
 
-    public String getLocation () {
-        return this.location;
-    }
-
     public void setId (long id) {
         this.id = id;
     }
@@ -93,9 +86,5 @@ public class Event implements Serializable {
 
     public void setIcon (String icon) {
         this.icon = icon;
-    }
-
-    public void setLocation (String location) {
-        this.location = location;
     }
 }

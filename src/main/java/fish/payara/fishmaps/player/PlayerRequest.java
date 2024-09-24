@@ -1,12 +1,10 @@
 package fish.payara.fishmaps.player;
 
-import fish.payara.fishmaps.world.block.Block;
-
 import java.io.Serializable;
 
 public class PlayerRequest implements Serializable {
     private String name;
-    private int x, z;
+    private int x, y, z;
     private String dimension;
 
     public PlayerRequest () {
@@ -14,16 +12,16 @@ public class PlayerRequest implements Serializable {
     }
 
     public Player toPlayer () {
-        return new Player(name, Block.getDescriptor(x, z, dimension), System.currentTimeMillis());
+        return new Player(name, System.currentTimeMillis(), x, y, z, dimension);
     }
 
     public static PlayerRequest fromPlayer (Player player) {
         PlayerRequest request = new PlayerRequest();
-        Block block = Block.fromDescriptor(player.getLocation());
         request.setName(player.getName());
-        request.setX(block.getX());
-        request.setZ(block.getZ());
-        request.setDimension(block.getDimension());
+        request.setX(player.getX());
+        request.setY(player.getY());
+        request.setZ(player.getZ());
+        request.setDimension(player.getDimension());
 
         return request;
     }
@@ -34,6 +32,10 @@ public class PlayerRequest implements Serializable {
 
     public void setX (int x) {
         this.x = x;
+    }
+
+    public void setY (int y) {
+        this.y = y;
     }
 
     public void setZ (int z) {
@@ -50,6 +52,10 @@ public class PlayerRequest implements Serializable {
 
     public int getX () {
         return this.x;
+    }
+
+    public int getY () {
+        return this.y;
     }
 
     public int getZ () {
