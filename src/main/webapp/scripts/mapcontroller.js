@@ -138,8 +138,8 @@ function movePlayers () {
             continue;
         }
 
-        playerHead.style.top = xPos;
-        playerHead.style.left = zPos;
+        playerHead.style.top = "" + zPos + "px";
+        playerHead.style.left = "" + xPos + "px";
     }
 }
 
