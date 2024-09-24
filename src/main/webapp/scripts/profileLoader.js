@@ -7,9 +7,6 @@ var z = 0;
 var dimension = "minecraft:overworld";
 
 function loadProfile () {
-    let image = document.getElementById("profileImage");
-    image.src = "images/players?name=" + currentPlayer;
-
     let mapPreview = document.getElementById("mapPreview");
     let mapX = Math.floor(x - MAP_BLOCK_WIDTH / 2);
     let mapZ = Math.floor(z - MAP_BLOCK_WIDTH / 2);
