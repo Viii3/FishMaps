@@ -9,6 +9,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
+@Cacheable(false)
 @Table(name = "blocks")
 @NamedQueries({
     @NamedQuery(
