@@ -34,7 +34,6 @@ public class BlockService {
             .setParameter("dimension", dimension)
             .getResultList();
 
-        this.clearContext();
         return blocks;
     }
 
@@ -88,22 +87,15 @@ public class BlockService {
 
     public void add (@Observes BlockEvent event) {
         this.add(event.block());
-        this.clearContext();
     }
 
     public void add (@Observes BlockListEvent event) {
         for (Block block : event.blocks()) {
             this.add(block);
         }
-        this.clearContext();
     }
 
     public List<String> getDimensions () {
         return this.entityManager.createNamedQuery(Block.QUERY_DIMENSION_LIST, String.class).getResultList();
-    }
-
-    private void clearContext () {
-        this.entityManager.flush();
-        this.entityManager.clear();
     }
 }
