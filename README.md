@@ -40,3 +40,19 @@ CALL asadmin create-resource-ref --enabled=true --target=server jdbc/local-postg
 
 CALL asadmin stop-domain
 ```
+
+## Reproducer for GOAWAY
+This branch and the associated [client branch](https://github.com/Viii3/FishMaps-Client/tree/Reproducer-for-GOAWAY)
+create an error where the server prints "Unable to send GOAWAY. Session terminated" and crashes.
+
+To reproduce this error:
+- Deploy the WAR file compiled from this branch and run the standard setup.
+- Run the associated version of the client application.
+  - This can be in a live environment or the integrated testing environment.
+  - If in a singleplayer environment, you will need to open/create a world.
+- Open the web application and view the Overworld map.
+  - Whenever the map flashes black, that is a tile updating.
+- Watch the server logs, the error may take a few minutes to appear.
+  - It will likely be preceded by nullpointer exceptions, these appear to be part of the problem, but they shouldn't be there either.
+
+Leaving the applications open for long enough will overload and crash the server, asadmin will be unresponsive.
