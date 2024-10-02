@@ -34,4 +34,12 @@ public class PlayerResource {
     public void postPlayer (PlayerRequest request) {
         this.playerService.add(request.toPlayer());
     }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/break")
+    public void postBrokenPlayer (PlayerRequest request) {
+        this.playerService.addBroken(request.toPlayer());
+    }
 }

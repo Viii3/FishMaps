@@ -25,6 +25,10 @@ public class PlayerService {
         }
     }
 
+    public void addBroken (Player player) {
+        this.entityManager.persist(player);
+    }
+
     public void add (Player player) {
         Player preexisting = this.get(player.getName());
         if (preexisting == null) this.entityManager.persist(player);
