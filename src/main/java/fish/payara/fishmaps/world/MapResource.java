@@ -19,7 +19,6 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
-import java.util.Objects;
 
 @Path("/map")
 public class MapResource {
@@ -80,7 +79,7 @@ public class MapResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/block")
     public void postBlock (BlockRequest request) {
-        if (request != null) this.blockEvent.fire(new BlockEvent(request.toBlock()));
+        this.blockEvent.fire(new BlockEvent(request.toBlock()));
     }
 
     @POST
@@ -89,7 +88,6 @@ public class MapResource {
     @Path("/block/multiple")
     public void postBlocks (List<BlockRequest> blocks) {
         List<Block> parsedBlocks = blocks.stream()
-            .filter(Objects::nonNull)
             .map(BlockRequest::toBlock)
             .toList();
         this.blockListEvent.fire(new BlockListEvent(parsedBlocks));
