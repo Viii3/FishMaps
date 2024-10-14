@@ -44,9 +44,9 @@ public class VisualMapServlet extends HttpServlet {
             graphics.dispose();
         }
 
-        resp.setContentType("image/bmp");
+        resp.setContentType("image/png");
         OutputStream stream = resp.getOutputStream();
-        ImageIO.write(image, "bmp", stream);
+        ImageIO.write(image, "png", stream);
         stream.close();
     }
 }
