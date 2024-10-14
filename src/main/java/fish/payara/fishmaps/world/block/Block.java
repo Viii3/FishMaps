@@ -27,6 +27,22 @@ import jakarta.persistence.Table;
     @NamedQuery(
         name = Block.QUERY_BLOCK_COUNT_DIMENSION,
         query = "SELECT COUNT(b) FROM Block b WHERE b.dimension = :dimension"
+    ),
+    @NamedQuery(
+        name = Block.QUERY_MAX_X,
+        query = "SELECT MAX(b.x) FROM Block b WHERE b.dimension = :dimension"
+    ),
+    @NamedQuery(
+        name = Block.QUERY_MIN_X,
+        query = "SELECT MIN(b.x) FROM Block b WHERE b.dimension = :dimension"
+    ),
+    @NamedQuery(
+        name = Block.QUERY_MAX_Z,
+        query = "SELECT MAX(b.z) FROM Block b WHERE b.dimension = :dimension"
+    ),
+    @NamedQuery(
+        name = Block.QUERY_MIN_Z,
+        query = "SELECT MIN(b.z) FROM Block b WHERE b.dimension = :dimension"
     )
 })
 public class Block extends AbstractCoordinateHolder {
@@ -34,6 +50,10 @@ public class Block extends AbstractCoordinateHolder {
     public static final String QUERY_DIMENSION_LIST = "Block.getAllDimensions";
     public static final String QUERY_BLOCK_COUNT = "Block.getBlockCount";
     public static final String QUERY_BLOCK_COUNT_DIMENSION = "Block.getBlockCountDimension";
+    public static final String QUERY_MAX_X = "Block.getMaxX";
+    public static final String QUERY_MIN_X = "Block.getMinX";
+    public static final String QUERY_MAX_Z = "Block.getMaxZ";
+    public static final String QUERY_MIN_Z = "Block.getMinZ";
 
     @Id
     private String descriptor;

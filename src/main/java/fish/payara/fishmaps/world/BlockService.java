@@ -73,6 +73,54 @@ public class BlockService {
         return new Chunk(blocks, dimension);
     }
 
+    public int getMaxX (String dimension) {
+        try {
+            Number maxX = (Number)this.entityManager.createNamedQuery(Block.QUERY_MAX_X)
+                .setParameter("dimension", dimension)
+                .getSingleResult();
+            return maxX.intValue();
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int getMinX (String dimension) {
+        try {
+            Number minZ = (Number)this.entityManager.createNamedQuery(Block.QUERY_MIN_X)
+                .setParameter("dimension", dimension)
+                .getSingleResult();
+            return minZ.intValue();
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int getMaxZ (String dimension) {
+        try {
+            Number maxZ = (Number)this.entityManager.createNamedQuery(Block.QUERY_MAX_Z)
+                .setParameter("dimension", dimension)
+                .getSingleResult();
+            return maxZ.intValue();
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
+
+    public int getMinZ (String dimension) {
+        try {
+            Number minZ = (Number)this.entityManager.createNamedQuery(Block.QUERY_MIN_Z)
+                .setParameter("dimension", dimension)
+                .getSingleResult();
+            return minZ.intValue();
+        }
+        catch (Exception e) {
+            return 0;
+        }
+    }
+
     public void add (Block block) {
         Block preexisting = this.getBlock(block.getDescriptor());
         if (preexisting == null) {
