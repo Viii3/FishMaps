@@ -61,15 +61,9 @@ public class BlockService {
         int minBlockX = chunkX * Chunk.CHUNK_LENGTH;
         int maxBlockX = minBlockX + Chunk.CHUNK_LENGTH - 1;
         int minBlockZ = chunkZ * Chunk.CHUNK_LENGTH;
-        int maxBlockZ = chunkZ + Chunk.CHUNK_LENGTH - 1;
+        int maxBlockZ = minBlockZ + Chunk.CHUNK_LENGTH - 1;
 
-        List<Block> blocks = new ArrayList<>();
-        for (int x = minBlockX; x <= maxBlockX; ++x) {
-            for (int z = minBlockZ; z <= maxBlockZ; ++z) {
-                Block block = this.getBlock(x, z, dimension);
-                if (block != null) blocks.add(block);
-            }
-        }
+        List<Block> blocks = this.getBlocksInRange(minBlockX, maxBlockX, minBlockZ, maxBlockZ, dimension);
         return new Chunk(blocks, dimension);
     }
 
