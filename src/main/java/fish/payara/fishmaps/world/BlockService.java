@@ -9,7 +9,6 @@ import jakarta.enterprise.event.Observes;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -39,7 +38,7 @@ public class BlockService {
 
     public long countBlocks () {
         try {
-            Number count = (Number) this.entityManager.createNamedQuery(Block.QUERY_BLOCK_COUNT).getSingleResult();
+            Number count = (Number)this.entityManager.createNamedQuery(Block.QUERY_BLOCK_COUNT).getSingleResult();
             return count.longValue();
         }
         catch (Exception e) {
@@ -49,7 +48,9 @@ public class BlockService {
 
     public long countBlocks (String dimension) {
         try {
-            Number count = (Number) this.entityManager.createNamedQuery(Block.QUERY_BLOCK_COUNT_DIMENSION).setParameter("dimension", dimension).getSingleResult();
+            Number count = (Number)this.entityManager.createNamedQuery(Block.QUERY_BLOCK_COUNT_DIMENSION)
+                .setParameter("dimension", dimension)
+                .getSingleResult();
             return count.longValue();
         }
         catch (Exception e) {
