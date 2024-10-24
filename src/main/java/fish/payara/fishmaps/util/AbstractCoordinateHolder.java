@@ -22,11 +22,11 @@ public abstract class AbstractCoordinateHolder implements Serializable {
     }
 
     public int getChunkX () {
-        return (this.getX() / Chunk.CHUNK_LENGTH) - (this.getX() < 0 ? 1 : 0);
+        return Chunk.getX(this.getX());
     }
 
     public int getChunkZ () {
-        return (this.getZ() / Chunk.CHUNK_LENGTH) - (this.getZ() < 0 ? 1 : 0);
+        return Chunk.getZ(this.getZ());
     }
 
     public int getX () {

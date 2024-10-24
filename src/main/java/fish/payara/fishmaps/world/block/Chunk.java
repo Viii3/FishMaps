@@ -16,6 +16,14 @@ public class Chunk implements Iterable<Block>, Serializable {
         this.dimension = dimension;
     }
 
+    public static int getX (int blockX) {
+        return (blockX / Chunk.CHUNK_LENGTH) - (blockX < 0 ? 1 : 0);
+    }
+
+    public static int getZ (int blockZ) {
+        return (blockZ / Chunk.CHUNK_LENGTH) - (blockZ < 0 ? 1 : 0);
+    }
+
     @Override
     public Iterator<Block> iterator () {
         return this.blocks.iterator();
