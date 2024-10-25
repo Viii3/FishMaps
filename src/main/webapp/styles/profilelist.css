@@ -10,12 +10,12 @@
     width: 75vw;
     border-width: 2px;
     border-style: solid;
-    border-color: #F0981B;
+    border-color: white;
     border-radius: 5px;
     text-align: center;
     margin: auto;
     transition: 0.25s ease;
-    background-color: #393939;
+    background-color: #4964c4;
     cursor: pointer;
     line-height: 75%;
 }

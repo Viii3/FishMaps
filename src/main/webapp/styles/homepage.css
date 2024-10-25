@@ -22,10 +22,10 @@ a {
     flex-grow: 1;
     font-size: large;
     text-decoration: none;
-    background-color: #F0981B;
+    background-color: #4964c4;
     border-width: 3px;
     border-style: solid;
-    border-color: #bc6d00;
+    border-color: white;
     border-radius: 100px;
     transition: 0.15s ease;
     width: 1px;
@@ -33,5 +33,5 @@ a {
 }
 
 .content a:hover {
-    background-color: #683900;
+    background-color: #2e3e77;
 }

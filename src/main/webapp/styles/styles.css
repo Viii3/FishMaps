@@ -1,7 +1,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
-    background-color: #002C3E;
+    background-color: #282c31;
 }
 
 h1 {
@@ -28,7 +28,7 @@ h1 {
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
-    background-color: #F0981B;
+    background-color: #4964c4;
     text-align: center;
     transition-duration: 0.25s;
     transition-timing-function: ease;
@@ -41,7 +41,7 @@ h1 {
 .sidePreview {
     width: 40px;
     height: 100%;
-    background-color: #bc6d00;
+    background-color: #132a7d;
     z-index: inherit;
     flex-shrink: 0;
     align-items: center;
@@ -60,7 +60,7 @@ h1 {
     border-style: solid;
     border-radius: 2px;
     border-width: 2px;
-    background-color: gray;
+    background-color: #132a7d;
     color: white;
     text-decoration: none;
 }
