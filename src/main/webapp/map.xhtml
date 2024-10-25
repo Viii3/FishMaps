@@ -20,6 +20,7 @@
             <div class="sideFullView">
                 <p><a href="./">Home</a></p>
                 <p><a href="./playerlist.xhtml">Players</a></p>
+                <p><a href="./images/fullMap?dimension=#{param.dimension}" target="_blank">Download</a></p>
                 <p>Map Layers</p>
                 <ui:repeat value="#{MapBean.dimensions}" var="dim">
                     <h:commandLink onclick="shiftDimension('#{dim}')" title="#{dim}" value="#{MapBean.normaliseDimensionName(dim)}" />
