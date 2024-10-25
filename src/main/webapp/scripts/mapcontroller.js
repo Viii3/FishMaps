@@ -22,6 +22,9 @@ var dimension = "minecraft:overworld";
 var scale = 1;
 
 // Internals
+const MAP_MOVE_INTERVAL_MILLIS = 250;
+var prevMapMoveTime = 0;
+var mapIntervalFunctionID = null;
 var playerData = [];
 var eventData = [];
 var socket;
@@ -218,10 +221,36 @@ function up () {
     renderAll();
 }
 
+function startIntervalUp () {
+    prevMapMoveTime += MAP_MOVE_INTERVAL_MILLIS * 2;
+    mapIntervalFunctionID = setInterval(intervalUp, MAP_MOVE_INTERVAL_MILLIS / 2);
+}
+
+function intervalUp () {
+    let currentTime = Date.now();
+    if (currentTime - prevMapMoveTime >= MAP_MOVE_INTERVAL_MILLIS) {
+        up();
+        prevMapMoveTime = currentTime;
+    }
+}
+
 function down () {
     currentZ += STEP;
     updateURL();
     renderAll();
+}
+
+function startIntervalDown () {
+    prevMapMoveTime += MAP_MOVE_INTERVAL_MILLIS * 2;
+    mapIntervalFunctionID = setInterval(intervalDown, MAP_MOVE_INTERVAL_MILLIS / 2);
+}
+
+function intervalDown () {
+    let currentTime = Date.now();
+    if (currentTime - prevMapMoveTime >= MAP_MOVE_INTERVAL_MILLIS) {
+        down();
+        prevMapMoveTime = currentTime;
+    }
 }
 
 function left () {
@@ -230,10 +259,42 @@ function left () {
     renderAll();
 }
 
+function startIntervalLeft () {
+    prevMapMoveTime += MAP_MOVE_INTERVAL_MILLIS * 2;
+    mapIntervalFunctionID = setInterval(intervalLeft, MAP_MOVE_INTERVAL_MILLIS / 2);
+}
+
+function intervalLeft () {
+    let currentTime = Date.now();
+    if (currentTime - prevMapMoveTime >= MAP_MOVE_INTERVAL_MILLIS) {
+        left();
+        prevMapMoveTime = currentTime;
+    }
+}
+
 function right () {
     currentX += STEP;
     updateURL();
     renderAll();
+}
+
+function startIntervalRight () {
+    prevMapMoveTime += MAP_MOVE_INTERVAL_MILLIS * 2;
+    mapIntervalFunctionID = setInterval(intervalRight, MAP_MOVE_INTERVAL_MILLIS / 2);
+}
+
+function intervalRight () {
+    let currentTime = Date.now();
+    if (currentTime - prevMapMoveTime >= MAP_MOVE_INTERVAL_MILLIS) {
+        right();
+        prevMapMoveTime = currentTime;
+    }
+}
+
+function stopMovementInterval () {
+    if (mapIntervalFunctionID == null) return;
+    clearInterval(mapIntervalFunctionID);
+    mapIntervalFunctionID = null;
 }
 
 function zoomIn () {

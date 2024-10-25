@@ -40,15 +40,15 @@
     <div class="view" id="eventView"></div>
     <div id="controller">
         <div class="controlpanel">
-            <img class="smallButton" src="images/zoom_in.png" onclick="zoomIn()" />
-            <img class="largeButton" src="images/up.png" onclick="up()" />
-            <img class="smallButton" src="images/zoom_out.png" onclick="zoomOut()" />
+            <img class="smallButton" src="images/zoom_in.png" draggable="false" onclick="zoomIn()" />
+            <img class="largeButton" src="images/up.png" draggable="false" onclick="up()" onmousedown="startIntervalUp()" onmouseleave="stopMovementInterval()" onmouseup="stopMovementInterval()" />
+            <img class="smallButton" src="images/zoom_out.png" draggable="false" onclick="zoomOut()" />
         </div>
         <br/>
         <div class="controlpanel">
-            <img class="largeButton" src="images/left.png" onclick="left()" />
-            <img class="largeButton" src="images/down.png" onclick="down()" />
-            <img class="largeButton" src="images/right.png" onclick="right()" />
+            <img class="largeButton" src="images/left.png" draggable="false" onclick="left()" onmousedown="startIntervalLeft()" onmouseleave="stopMovementInterval()" onmouseup="stopMovementInterval()" />
+            <img class="largeButton" src="images/down.png" draggable="false" onclick="down()" onmousedown="startIntervalDown()" onmouseleave="stopMovementInterval()" onmouseup="stopMovementInterval()" />
+            <img class="largeButton" src="images/right.png" draggable="false" onclick="right()" onmousedown="startIntervalRight()" onmouseleave="stopMovementInterval()" onmouseup="stopMovementInterval()" />
         </div>
     </div>
 </h:body>
