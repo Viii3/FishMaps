@@ -9,8 +9,8 @@
     min-width: fit-content;
     width: 75vw;
     border-width: 2px;
-    border-style: groove;
-    border-color: orange;
+    border-style: solid;
+    border-color: #F0981B;
     border-radius: 5px;
     text-align: center;
     margin: auto;

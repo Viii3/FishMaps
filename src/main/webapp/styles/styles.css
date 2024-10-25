@@ -1,7 +1,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: white;
-    background-color: #272727;
+    background-color: #002C3E;
 }
 
 h1 {
@@ -28,7 +28,7 @@ h1 {
     overflow: hidden;
     overflow-x: hidden;
     overflow-y: hidden;
-    background-color: #ffa580;
+    background-color: #F0981B;
     text-align: center;
     transition-duration: 0.25s;
     transition-timing-function: ease;
@@ -41,7 +41,7 @@ h1 {
 .sidePreview {
     width: 40px;
     height: 100%;
-    background-color: #e8845d;
+    background-color: #bc6d00;
     z-index: inherit;
     flex-shrink: 0;
     align-items: center;

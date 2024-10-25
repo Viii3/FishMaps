@@ -13,10 +13,24 @@
     image-rendering: pixelated;
 }
 
+.largeButton:hover {
+    outline: gray;
+    outline-width: 2px;
+    outline-style: solid;
+    outline-offset: -4px;
+}
+
 .smallButton {
     width: 32px;
     height: 32px;
     image-rendering: pixelated;
+}
+
+.smallButton:hover {
+    outline: gray;
+    outline-width: 2px;
+    outline-style: solid;
+    outline-offset: -4px;
 }
 
 .controlpanel {
