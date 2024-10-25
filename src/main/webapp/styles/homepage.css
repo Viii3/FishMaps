@@ -1,7 +1,37 @@
 a:visited {
-    color: yellow;
+    color: white;
 }
 
 a {
-    color: cyan;
+    color: white;
+}
+
+.contentBox {
+    text-align: center;
+    width: 70vw;
+    margin: auto;
+}
+
+.content {
+    text-align: center;
+    align-content: center;
+    display: flex;
+}
+
+.content a {
+    flex-grow: 1;
+    font-size: large;
+    text-decoration: none;
+    background-color: #F0981B;
+    border-width: 3px;
+    border-style: solid;
+    border-color: #bc6d00;
+    border-radius: 100px;
+    transition: 0.15s ease;
+    width: 1px;
+    padding: 10px;
+}
+
+.content a:hover {
+    background-color: #683900;
 }

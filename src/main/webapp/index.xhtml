@@ -12,13 +12,19 @@
 </h:head>
 <h:body>
     <h1>FishMaps</h1>
-    <div>
-        Dimensions:<br/>
-        <ui:repeat value="#{MapBean.dimensions}" var="dim">
-            <h:outputLink value="./map.xhtml?dimension=#{dim}">#{MapBean.normaliseDimensionName(dim)}</h:outputLink>
-            <br/>
-        </ui:repeat>
+    <div class="contentBox">
+        <h2>Map Layers</h2>
+        <div class="content">
+            <ui:repeat value="#{MapBean.dimensions}" var="dim">
+                <h:outputLink value="./map.xhtml?dimension=#{dim}">#{MapBean.normaliseDimensionName(dim)}</h:outputLink>
+            </ui:repeat>
+        </div>
     </div>
-    <p><a href="./playerlist.xhtml">Player List</a></p>
+    <div class="contentBox">
+        <h2>Players</h2>
+        <div class="content">
+            <a href="./playerlist.xhtml">Player List</a>
+        </div>
+    </div>
 </h:body>
 </html>
