@@ -3,6 +3,7 @@ package fish.payara.fishmaps.world;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.Chunk;
 import jakarta.annotation.Resource;
+import jakarta.enterprise.concurrent.ManagedExecutorDefinition;
 import jakarta.enterprise.concurrent.ManagedExecutorService;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
@@ -18,15 +19,20 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.concurrent.Semaphore;
 import java.util.logging.Logger;
 
+@ManagedExecutorDefinition(
+    name = FullMapServlet.EXECUTOR_SERVICE,
+    maxAsync = 6
+)
 @WebServlet("/images/fullMap/*")
 public class FullMapServlet extends HttpServlet {
+    public static final String EXECUTOR_SERVICE = "java:app/concurrent/FullMapExecutor";
+
     @Inject
     private BlockService blockService;
 
-    @Resource
+    @Resource(lookup = EXECUTOR_SERVICE)
     private ManagedExecutorService managedExecutorService;
 
     @Override
@@ -55,12 +61,11 @@ public class FullMapServlet extends HttpServlet {
         final int height = Math.ceilDiv(maxZ - minZ, Chunk.CHUNK_LENGTH) * Chunk.CHUNK_LENGTH;
         BufferedImage largeMap = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
-        Semaphore semaphore = new Semaphore(4);
         List<Future<?>> futures = new ArrayList<>();
 
         for (int x = minChunkX; x <= maxChunkX; ++x) {
             for (int z = minChunkZ; z <= maxChunkZ; ++z) {
-                futures.add(this.managedExecutorService.submit(new MapFragmentLoader(x, z, dimension, minX, minZ, largeMap, semaphore)));
+                futures.add(this.managedExecutorService.submit(new MapFragmentLoader(x, z, dimension, minX, minZ, largeMap)));
             }
         }
 
@@ -79,34 +84,23 @@ public class FullMapServlet extends HttpServlet {
         private final int mapMinX, mapMinZ;
         private final String dimension;
         private final BufferedImage image;
-        private final Semaphore semaphore;
 
-        public MapFragmentLoader (int chunkX, int chunkZ, String dimension, int mapMinX, int mapMinZ, BufferedImage image, Semaphore semaphore) {
+        public MapFragmentLoader (int chunkX, int chunkZ, String dimension, int mapMinX, int mapMinZ, BufferedImage image) {
             this.chunkX = chunkX;
             this.chunkZ = chunkZ;
             this.dimension = dimension;
             this.mapMinX = mapMinX;
             this.mapMinZ = mapMinZ;
             this.image = image;
-            this.semaphore = semaphore;
         }
 
         @Override
         public void run () {
-            try {
-                this.semaphore.acquire();
-                Chunk chunk = blockService.getChunk(this.chunkX, this.chunkZ, this.dimension);
-                synchronized (this.image) {
-                    for (Block block : chunk) {
-                        this.image.setRGB(block.getX() - this.mapMinX, block.getZ() - this.mapMinZ, block.getColour());
-                    }
+            Chunk chunk = blockService.getChunk(this.chunkX, this.chunkZ, this.dimension);
+            synchronized (this.image) {
+                for (Block block : chunk) {
+                    this.image.setRGB(block.getX() - this.mapMinX, block.getZ() - this.mapMinZ, block.getColour());
                 }
-            }
-            catch (InterruptedException ignored) {
-
-            }
-            finally {
-                this.semaphore.release();
             }
 
         }
