@@ -1,5 +1,7 @@
 package fish.payara.fishmaps.player;
 
+import fish.payara.fishmaps.RestConfiguration;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -31,6 +33,7 @@ public class PlayerResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(RestConfiguration.ROLE_ADMIN)
     public void postPlayer (PlayerRequest request) {
         this.playerService.add(request.toPlayer());
     }

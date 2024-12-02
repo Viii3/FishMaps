@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.world;
 
+import fish.payara.fishmaps.RestConfiguration;
 import fish.payara.fishmaps.event.EventService;
 import fish.payara.fishmaps.event.request.EventOutputRequest;
 import fish.payara.fishmaps.player.PlayerRequest;
@@ -8,6 +9,7 @@ import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockEvent;
 import fish.payara.fishmaps.world.block.BlockListEvent;
 import fish.payara.fishmaps.world.block.Chunk;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -78,6 +80,7 @@ public class MapResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(RestConfiguration.ROLE_ADMIN)
     @Path("/block")
     public void postBlock (BlockRequest request) {
         if (request != null) this.blockEvent.fire(new BlockEvent(request.toBlock()));
@@ -86,6 +89,7 @@ public class MapResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed(RestConfiguration.ROLE_ADMIN)
     @Path("/block/multiple")
     public void postBlocks (List<BlockRequest> blocks) {
         List<Block> parsedBlocks = blocks.stream()

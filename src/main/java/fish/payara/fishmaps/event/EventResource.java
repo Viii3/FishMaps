@@ -1,8 +1,10 @@
 package fish.payara.fishmaps.event;
 
+import fish.payara.fishmaps.RestConfiguration;
 import fish.payara.fishmaps.event.request.EventFullRequest;
 import fish.payara.fishmaps.event.request.EventOutputRequest;
 import fish.payara.fishmaps.event.request.ParticipantRequest;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -29,6 +31,7 @@ public class EventResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(RestConfiguration.ROLE_ADMIN)
     public void addEvent (EventFullRequest request) {
         List<EventParticipation> participationList = request.getParticipation().stream().map(ParticipantRequest::toEventParticipation).toList();
         this.eventService.addEvent(request.getEvent().toEvent(), participationList);
