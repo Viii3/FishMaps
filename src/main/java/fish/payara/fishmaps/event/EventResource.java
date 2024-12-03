@@ -15,6 +15,7 @@ import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.List;
+import java.util.Objects;
 
 @Path("/event")
 public class EventResource {
@@ -33,8 +34,14 @@ public class EventResource {
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed(RestConfiguration.ROLE_ADMIN)
     public void addEvent (EventFullRequest request) {
-        List<EventParticipation> participationList = request.getParticipation().stream().map(ParticipantRequest::toEventParticipation).toList();
-        this.eventService.addEvent(request.getEvent().toEvent(), participationList);
+        if (request != null) {
+            List<EventParticipation> participationList = request.getParticipation()
+                .stream()
+                .filter(Objects::nonNull)
+                .map(ParticipantRequest::toEventParticipation)
+                .toList();
+            this.eventService.addEvent(request.getEvent().toEvent(), participationList);
+        }
     }
 
     @GET
