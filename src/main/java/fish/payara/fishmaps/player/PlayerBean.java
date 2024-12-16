@@ -7,13 +7,17 @@ import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.util.List;
 
 @Named(value = "PlayerBean")
 @RequestScoped
 public class PlayerBean {
-    private static final long MILLISECONDS_UNTIL_OFFLINE = 30000;
+    @Inject
+    @ConfigProperty(name = "millis_until_player_offline")
+    private long MILLISECONDS_UNTIL_OFFLINE;
+
     private static final String OFFLINE_PREFIX = "Offline, last seen: ";
 
     @EJB

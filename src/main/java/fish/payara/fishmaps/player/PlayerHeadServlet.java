@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -25,8 +26,13 @@ import java.util.logging.Logger;
 
 @WebServlet("/images/players/*")
 public class PlayerHeadServlet extends HttpServlet {
-    private static final String NAME_LOOKUP = "https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname";
-    private static final String PROFILE_LOOKUP = "https://sessionserver.mojang.com/session/minecraft/profile/";
+    @Inject
+    @ConfigProperty(name = "mojang_name_lookup_url", defaultValue = "https://api.minecraftservices.com/minecraft/profile/lookup/bulk/byname")
+    private String NAME_LOOKUP;
+
+    @Inject
+    @ConfigProperty(name = "mojang_profile_lookup_url", defaultValue = "https://sessionserver.mojang.com/session/minecraft/profile/")
+    private String PROFILE_LOOKUP;
 
     private static BufferedImage defaultImage;
 
