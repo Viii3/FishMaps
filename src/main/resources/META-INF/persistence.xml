@@ -2,7 +2,7 @@
 <persistence xmlns="https://jakarta.ee/xml/ns/persistence" version="3.0">
     <persistence-unit name="TestUnit">
         <jta-data-source>
-            jdbc/local-postgres
+            jdbc/fishmaps
         </jta-data-source>
         <shared-cache-mode>
             NONE

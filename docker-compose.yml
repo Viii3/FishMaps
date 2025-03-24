@@ -1,0 +1,33 @@
+version: '3'
+services:
+ 
+  fishmaps-payara:
+#    see info at https://hub.docker.com/r/payara/server-full/
+    image: fishmaps-payara
+    container_name: fishmaps-payara
+    restart: always
+    depends_on:
+      - fishmaps-db
+    ports:
+      - "9080:8080" # web
+      - "9081:8181" # web https
+      - "9048:4848" # admin
+      - "9009:9009" # debug
+ 
+  fishmaps-db:
+    image: postgres
+    restart: always
+    container_name: fishmaps-db
+#    user: "1000:1000"
+    volumes:
+      - fishmaps-db:/var/lib/postgresql/data
+#      - ./db-init:/docker-entrypoint-initdb.d/
+    environment:
+      - POSTGRES_DB=fishmaps
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "9054:5432"
+ 
+volumes:
+    fishmaps-db:
