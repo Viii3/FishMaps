@@ -12,14 +12,16 @@ import jakarta.jms.Queue;
 import jakarta.jms.Topic;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Stateless
 public class BlockSender {
     @Resource(lookup = "jms/ConnectionFactory")
-    private static ConnectionFactory connectionFactory;
+    private ConnectionFactory connectionFactory;
     
     @Resource(lookup = "jms/BlockTopic")
-    private static Topic topic;
+    private Topic topic;
 
     public void add (@Observes BlockEvent event) {
         this.sendBlockMessage(List.of(event.block()));
@@ -31,10 +33,14 @@ public class BlockSender {
     
     private void sendBlockMessage (List<Block> blocks) {
         try (JMSContext context = connectionFactory.createContext()) {
-            context.createProducer().send(topic, "Timestamp: " + System.currentTimeMillis());
+            Logger.getLogger(BlockSender.class.getName())
+                .log(Level.INFO, "Preparing " + blocks.size() + " JMS messages.");
+            long startTime = System.nanoTime();
             for (Block block : blocks) {
                 context.createProducer().send(topic, block);
             }
+            long duration = System.nanoTime() - startTime;
+            context.createProducer().send(topic, "Duration nanos: " + duration);
             context.createProducer().send(topic, context.createMessage());
         }
     }
