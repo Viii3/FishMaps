@@ -2,6 +2,7 @@ package fish.payara.fishmaps.azul.performance.json;
 
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockListEvent;
+import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
 import jakarta.json.Json;
@@ -16,11 +17,8 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Stateless
 public class JsonWriter {
-    @Inject
-    @ConfigProperty(name = "json_save_directory")
-    private String saveDirectory;
-    
     public void writeBlocks (@Observes BlockListEvent event) {
         long t1 = System.nanoTime();
         JsonArrayBuilder jsonArrayBuilder = Json.createArrayBuilder();
@@ -41,8 +39,14 @@ public class JsonWriter {
             .add("array_construction_duration", t2 - t1)
             .build();
         
+        String saveDir = System.getenv("azul_json_save_directory");
+        if (saveDir == null) {
+            Logger.getLogger(JsonWriter.class.getName())
+                .log(Level.INFO, "The environment variable \"azul_json_save_directory\" must be set to a valid path.");
+            return;
+        }
         String filename = "BlockRequest" + System.currentTimeMillis() + ".json";
-        Path savePath = Path.of(saveDirectory);
+        Path savePath = Path.of(saveDir);
         
         try (FileWriter writer = new FileWriter(savePath.resolve(filename).toFile())) {
             if (!savePath.toFile().exists()) {
