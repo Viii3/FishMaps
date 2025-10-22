@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job id="batch-performance" xmlns="https://jakarta.ee/xml/ns/jakartaee" version="2.0">
+    <properties>
+        <property name="fileType" value="json"/>
+    </properties>
+
+    <listeners>
+        <listener ref="batchListener"></listener>
+    </listeners>
+
+    <step id="processJson">
+        <chunk>
+            <reader ref="blockJsonReader"></reader>
+            <processor ref="blockProcessor"></processor>
+            <writer ref="blockWriter"></writer>
+        </chunk>
+    </step>
+</job>
