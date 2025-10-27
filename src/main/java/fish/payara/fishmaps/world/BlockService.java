@@ -10,6 +10,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Stateless
 public class BlockService {
@@ -133,9 +135,13 @@ public class BlockService {
     }
 
     public void add (@Observes BlockListEvent event) {
+        long t1 = System.nanoTime();
         for (Block block : event.blocks()) {
             this.add(block);
         }
+        long duration = System.nanoTime() - t1;
+        Logger.getLogger(BlockService.class.getName())
+            .log(Level.INFO, "Added " + event.blocks().size() + " blocked in " + duration + "ns");
     }
 
     public List<String> getDimensions () {
