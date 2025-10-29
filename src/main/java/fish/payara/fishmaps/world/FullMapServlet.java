@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.world;
 
+import fish.payara.fishmaps.azul.performance.DurationLogger;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.Chunk;
 import jakarta.annotation.Resource;
@@ -19,7 +20,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
-import java.util.logging.Logger;
 
 @ManagedExecutorDefinition(
     name = FullMapServlet.EXECUTOR_SERVICE,
@@ -37,7 +37,7 @@ public class FullMapServlet extends HttpServlet {
 
     @Override
     protected void doGet (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Logger logger = Logger.getLogger(FullMapServlet.class.getName());
+        long t1 = System.nanoTime();
         String dimension = req.getParameter("dimension");
 
 
@@ -77,6 +77,8 @@ public class FullMapServlet extends HttpServlet {
         OutputStream stream = resp.getOutputStream();
         ImageIO.write(largeMap, "png", stream);
         stream.close();
+        long duration = System.nanoTime() - t1;
+        DurationLogger.log("Concurrency", width * height, duration);
     }
 
     private final class MapFragmentLoader implements Runnable {
