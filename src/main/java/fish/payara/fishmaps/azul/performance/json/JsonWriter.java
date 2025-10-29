@@ -1,14 +1,13 @@
 package fish.payara.fishmaps.azul.performance.json;
 
+import fish.payara.fishmaps.azul.performance.DurationLogger;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockListEvent;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Observes;
-import jakarta.inject.Inject;
 import jakarta.json.Json;
 import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -32,11 +31,11 @@ public class JsonWriter {
                     .add("colour", block.getColour())
             );
         }
-        long t2 = System.nanoTime();
+        long duration = System.nanoTime() - t1;
         
         JsonObject jsonObject = Json.createObjectBuilder()
             .add("blocks", jsonArrayBuilder)
-            .add("array_construction_duration", t2 - t1)
+            .add("array_construction_duration", duration)
             .build();
         
         String saveDir = System.getenv("azul_json_save_directory");
@@ -53,8 +52,7 @@ public class JsonWriter {
                 Files.createDirectories(savePath);
             }
             Json.createGenerator(writer).write(jsonObject).close();
-            Logger.getLogger(JsonWriter.class.getName())
-                .log(Level.INFO, "Wrote file " + filename);
+            DurationLogger.log("JSON", event.blocks().size(), duration);
         } catch (IOException e) {
             
         }
