@@ -18,9 +18,9 @@ import java.util.stream.Stream;
 
 @Named
 public class BlockJsonReader extends AbstractItemReader {
-    int index;
-    Path saveDirectory;
-    File jsonFile;
+    private int index;
+    private Path saveDirectory;
+    private File jsonFile;
     
     @Override
     public Object readItem () throws Exception {
