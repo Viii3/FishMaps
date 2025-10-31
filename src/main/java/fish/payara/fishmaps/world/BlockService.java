@@ -135,11 +135,11 @@ public class BlockService {
     }
 
     public void add (@Observes BlockListEvent event) {
-        long t1 = System.nanoTime();
+        long startTime = System.nanoTime();
         for (Block block : event.blocks()) {
             this.add(block);
         }
-        long duration = System.nanoTime() - t1;
+        long duration = System.nanoTime() - startTime;
         Logger.getLogger(BlockService.class.getName())
             .log(Level.INFO, "Added " + event.blocks().size() + " blocked in " + duration + "ns");
     }
