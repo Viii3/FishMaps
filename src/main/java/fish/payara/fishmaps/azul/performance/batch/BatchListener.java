@@ -8,17 +8,17 @@ import java.util.logging.Logger;
 
 @Named
 public class BatchListener implements JobListener {
-    long time1;
+    private long startTime;
     
     @Override
     public void beforeJob () throws Exception {
-        this.time1 = System.nanoTime();
+        this.startTime = System.nanoTime();
     }
 
     @Override
     public void afterJob () throws Exception {
         long time2 = System.nanoTime();
         Logger.getLogger(BatchListener.class.getName())
-            .log(Level.INFO, "Batch task completed in " + (time2 - time1) + " nanos.");
+            .log(Level.INFO, "Batch task completed in " + (time2 - startTime) + " nanos.");
     }
 }
