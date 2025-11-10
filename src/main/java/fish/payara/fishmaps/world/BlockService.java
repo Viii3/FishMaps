@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.world;
 
+import fish.payara.fishmaps.azul.performance.DurationLogger;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockEvent;
 import fish.payara.fishmaps.world.block.BlockListEvent;
@@ -140,8 +141,7 @@ public class BlockService {
             this.add(block);
         }
         long duration = System.nanoTime() - startTime;
-        Logger.getLogger(BlockService.class.getName())
-            .log(Level.INFO, "Added " + event.blocks().size() + " blocked in " + duration + "ns");
+        DurationLogger.log("Persistence", event.blocks().size(), duration);
     }
 
     public List<String> getDimensions () {
