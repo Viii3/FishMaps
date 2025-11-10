@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.azul.performance.batch;
 
+import fish.payara.fishmaps.azul.performance.DurationLogger;
 import fish.payara.fishmaps.world.block.Block;
 import jakarta.batch.api.chunk.AbstractItemReader;
 import jakarta.inject.Named;
@@ -21,6 +22,7 @@ public class BlockJsonReader extends AbstractItemReader {
     private int index;
     private Path saveDirectory;
     private File jsonFile;
+    private long startTime;
     
     @Override
     public Object readItem () throws Exception {
@@ -45,6 +47,7 @@ public class BlockJsonReader extends AbstractItemReader {
     @Override
     public void open (Serializable checkpoint) throws Exception {
         this.index = 0;
+        this.startTime = System.nanoTime();
         String directory = System.getenv("azul_json_save_directory");
         if (directory == null) {
             saveDirectory = null;
@@ -66,5 +69,15 @@ public class BlockJsonReader extends AbstractItemReader {
                 }
             }
         }
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (this.startTime == 0 || this.index == 0) {
+            return;
+        }
+        
+        long duration = System.nanoTime() - this.startTime;
+        DurationLogger.log("Batch/Reader", this.index, duration);
     }
 }
