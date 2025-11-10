@@ -3,6 +3,7 @@ package fish.payara.fishmaps.azul.performance.json;
 import fish.payara.fishmaps.azul.performance.DurationLogger;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockListEvent;
+import jakarta.batch.runtime.BatchRuntime;
 import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Observes;
 import jakarta.json.Json;
@@ -13,6 +14,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +46,7 @@ public class JsonWriter {
                 .log(Level.INFO, "The environment variable \"azul_json_save_directory\" must be set to a valid path.");
             return;
         }
-        String filename = "BlockRequest" + System.currentTimeMillis() + ".json";
+        String filename = "BlockRequest-" + System.currentTimeMillis() + ".json";
         Path savePath = Path.of(saveDir);
         
         try (FileWriter writer = new FileWriter(savePath.resolve(filename).toFile())) {
@@ -56,5 +58,7 @@ public class JsonWriter {
         } catch (IOException e) {
             
         }
+
+        BatchRuntime.getJobOperator().start("batch-performance", new Properties());
     }
 }
