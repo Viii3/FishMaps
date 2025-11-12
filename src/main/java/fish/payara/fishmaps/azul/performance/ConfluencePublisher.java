@@ -119,7 +119,7 @@ public class ConfluencePublisher {
         content.append("<tr>");
         content.append("<th>Module</th>");
         content.append("<th>Items Processed</th>");
-        content.append("<th>Duration</th>");
+        content.append("<th>Duration (ns)</th>");
         content.append("</tr>");
 
         for (DurationLogger.PerformanceLog log : logs) {
