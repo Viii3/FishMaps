@@ -57,8 +57,8 @@ public class FullMapServlet extends HttpServlet {
         final int maxChunkZ = Chunk.getZ(maxZ);
 
         // The map is printed in terms of chunks.
-        final int width = Math.ceilDiv(maxX - minX, Chunk.CHUNK_LENGTH) * Chunk.CHUNK_LENGTH;
-        final int height = Math.ceilDiv(maxZ - minZ, Chunk.CHUNK_LENGTH) * Chunk.CHUNK_LENGTH;
+        final int width = Math.max(Math.ceilDiv(maxX - minX, Chunk.CHUNK_LENGTH), 1) * Chunk.CHUNK_LENGTH;
+        final int height = Math.max(Math.ceilDiv(maxZ - minZ, Chunk.CHUNK_LENGTH), 1) * Chunk.CHUNK_LENGTH;
         BufferedImage largeMap = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         List<Future<?>> futures = new ArrayList<>();
