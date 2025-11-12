@@ -16,6 +16,6 @@ public class BatchListener implements JobListener {
     @Override
     public void afterJob () throws Exception {
         long endTime = System.nanoTime();
-        DurationLogger.log("Batch", -1, endTime - startTime);
+        DurationLogger.log("Batch", endTime - startTime);
     }
 }
