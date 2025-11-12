@@ -1,0 +1,50 @@
+package fish.payara.fishmaps.azul.performance;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.Properties;
+
+/**
+ * Utility class to load environment variables from a .env file.
+ * Variables are loaded into system properties and can be accessed via System.getProperty().
+ */
+public class EnvLoader {
+    private static final String ENV_FILE = "../.env";
+    private static boolean loaded = false;
+
+    /**
+     * Loads environment variables from the .env file into system properties.
+     * This method is idempotent and will only load the variables once.
+     */
+    public static synchronized void load() {
+        if (loaded) return;
+
+        try {
+            File envFile = Paths.get(ENV_FILE).toFile();
+            if (envFile.exists()) {
+                Properties props = new Properties();
+                try (FileReader reader = new FileReader(envFile)) {
+                    props.load(reader);
+                }
+
+                // Set each property as a system property if not already set
+                props.forEach((key, value) -> {
+                    String keyStr = key.toString().trim();
+                    String valueStr = value.toString().trim();
+                    if (System.getProperty(keyStr) == null) {
+                        System.setProperty(keyStr, valueStr);
+                    }
+                });
+
+                System.out.println("Loaded environment variables from " + ENV_FILE);
+            } else {
+                System.err.println("Warning: .env file not found at " + envFile.getAbsolutePath());
+            }
+            loaded = true;
+        } catch (IOException e) {
+            System.err.println("Warning: Could not load .env file: " + e.getMessage());
+        }
+    }
+}
