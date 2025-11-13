@@ -43,6 +43,10 @@ import jakarta.persistence.Table;
     @NamedQuery(
         name = Block.QUERY_MIN_Z,
         query = "SELECT MIN(b.z) FROM Block b WHERE b.dimension = :dimension"
+    ),
+    @NamedQuery(
+        name = Block.CLEAR_DIMENSION,
+        query = "DELETE FROM Block b WHERE b.dimension = :dimension"
     )
 })
 public class Block extends AbstractCoordinateHolder {
@@ -54,6 +58,7 @@ public class Block extends AbstractCoordinateHolder {
     public static final String QUERY_MIN_X = "Block.getMinX";
     public static final String QUERY_MAX_Z = "Block.getMaxZ";
     public static final String QUERY_MIN_Z = "Block.getMinZ";
+    public static final String CLEAR_DIMENSION = "Block.clearDimension";
 
     @Id
     private String descriptor;

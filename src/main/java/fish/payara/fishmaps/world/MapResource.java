@@ -13,6 +13,7 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -97,5 +98,12 @@ public class MapResource {
             .map(BlockRequest::toBlock)
             .toList();
         this.blockListEvent.fire(new BlockListEvent(parsedBlocks));
+    }
+    
+    @DELETE
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed(RestConfiguration.ROLE_ADMIN)
+    public void deleteDimension (@QueryParam("dimension") String dimension) {
+        this.blockService.clear(dimension);
     }
 }
