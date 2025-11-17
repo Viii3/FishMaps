@@ -11,8 +11,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Stateless
 public class BlockService {
@@ -146,5 +144,11 @@ public class BlockService {
 
     public List<String> getDimensions () {
         return this.entityManager.createNamedQuery(Block.QUERY_DIMENSION_LIST, String.class).getResultList();
+    }
+    
+    public void clear (String dimension) {
+        this.entityManager.createNamedQuery(Block.CLEAR_DIMENSION)
+            .setParameter("dimension", dimension)
+            .executeUpdate();
     }
 }

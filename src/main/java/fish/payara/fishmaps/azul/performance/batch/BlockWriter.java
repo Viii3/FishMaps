@@ -13,6 +13,8 @@ import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Named
 public class BlockWriter extends AbstractItemWriter {
@@ -22,7 +24,7 @@ public class BlockWriter extends AbstractItemWriter {
     
     @Override
     public void writeItems (List<Object> list) throws Exception {
-        this.itemCount = list.size();
+        this.itemCount += list.size();
         for (Object object : list) {
             if (object instanceof Block block) {
                 JsonObject blockJson = Json.createObjectBuilder()

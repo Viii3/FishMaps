@@ -58,7 +58,7 @@ public class BlockJsonReader extends AbstractItemReader {
                 try (Stream<Path> contents = Files.list(saveDirectory)) {
                     this.jsonFile = contents
                         .filter(path -> path.toFile().isFile() && path.toString().endsWith("json"))
-                        .max(Path::compareTo)
+                        .max((path1, path2) -> Math.toIntExact(path1.toFile().lastModified() - path2.toFile().lastModified()))
                         .map(Path::toFile)
                         .orElse(null);
                     
