@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Utility class to load environment variables from a .env file.
@@ -13,6 +15,7 @@ import java.util.Properties;
 public class EnvLoader {
     private static final String ENV_FILE = "../.env";
     private static boolean loaded = false;
+    private static final Logger logger = Logger.getLogger(EnvLoader.class.getName());
 
     /**
      * Loads environment variables from the .env file into system properties.
@@ -38,13 +41,13 @@ public class EnvLoader {
                     }
                 });
 
-                System.out.println("Loaded environment variables from " + ENV_FILE);
+                logger.log(Level.INFO, "Loaded environment variables from " + ENV_FILE);
             } else {
-                System.err.println("Warning: .env file not found at " + envFile.getAbsolutePath());
+                logger.log(Level.WARNING, "Warning: .env file not found at " + envFile.getAbsolutePath());
             }
             loaded = true;
         } catch (IOException e) {
-            System.err.println("Warning: Could not load .env file: " + e.getMessage());
+            logger.log(Level.SEVERE, "Warning: Could not load .env file: ", e);
         }
     }
 }
