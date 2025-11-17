@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.azul.performance.messaging;
 
+import fish.payara.fishmaps.azul.performance.DurationLogger;
 import fish.payara.fishmaps.world.block.Block;
 import fish.payara.fishmaps.world.block.BlockEvent;
 import fish.payara.fishmaps.world.block.BlockListEvent;
@@ -8,7 +9,9 @@ import jakarta.ejb.Stateless;
 import jakarta.enterprise.event.Observes;
 import jakarta.jms.ConnectionFactory;
 import jakarta.jms.JMSContext;
-import jakarta.jms.Queue;
+import jakarta.jms.JMSException;
+import jakarta.jms.JMSProducer;
+import jakarta.jms.ObjectMessage;
 import jakarta.jms.Topic;
 
 import java.util.List;
@@ -32,16 +35,20 @@ public class BlockSender {
     }
     
     private void sendBlockMessage (List<Block> blocks) {
+        long t1 = System.nanoTime();
         try (JMSContext context = connectionFactory.createContext()) {
-            Logger.getLogger(BlockSender.class.getName())
-                .log(Level.INFO, "Preparing " + blocks.size() + " JMS messages.");
-            long startTime = System.nanoTime();
-            for (Block block : blocks) {
-                context.createProducer().send(topic, block);
-            }
-            long duration = System.nanoTime() - startTime;
-            context.createProducer().send(topic, "Duration nanos: " + duration);
-            context.createProducer().send(topic, context.createMessage());
+            JMSProducer producer = context.createProducer();
+            ObjectMessage message = context.createObjectMessage();
+            message.setObject(blocks.toArray(new Block[0]));
+            message.setLongProperty("time", System.nanoTime());
+            producer.send(topic, message);
         }
+        catch (JMSException e) {
+            Logger.getLogger(BlockSender.class.getName())
+                .log(Level.SEVERE, "[JMS/Sending] Encountered error: ", e);
+        }
+        
+        long duration = System.nanoTime() - t1;
+        DurationLogger.log("JMS/Sending", blocks.size(), duration);
     }
 }

@@ -1,5 +1,6 @@
 package fish.payara.fishmaps.world;
 
+import fish.payara.fishmaps.azul.performance.DurationLogger;
 import fish.payara.fishmaps.world.block.Block;
 import jakarta.inject.Inject;
 import jakarta.servlet.ServletException;
@@ -20,6 +21,16 @@ import java.util.List;
 public class VisualMapServlet extends HttpServlet {
     @Inject
     BlockService service;
+
+    @Override
+    protected void service (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        long t1 = System.nanoTime();
+        int width = Math.max(1, Integer.parseInt(req.getParameter("width")));
+        int height = Math.max(1, Integer.parseInt(req.getParameter("height")));
+        super.service(req, resp);
+        long duration = System.nanoTime() - t1;
+        DurationLogger.log("Servlet", width * height, duration);
+    }
 
     @Override
     protected void doGet (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
