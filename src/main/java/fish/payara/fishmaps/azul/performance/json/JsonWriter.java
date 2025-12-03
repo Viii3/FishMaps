@@ -49,13 +49,17 @@ public class JsonWriter {
         String filename = "BlockRequest-" + System.currentTimeMillis() + ".json";
         Path savePath = Path.of(saveDir);
         
-        try (FileWriter writer = new FileWriter(savePath.resolve(filename).toFile())) {
+        try {
             if (!savePath.toFile().exists()) {
                 Files.createDirectories(savePath);
             }
-            Json.createGenerator(writer).write(jsonObject).close();
+            
+            try (FileWriter writer = new FileWriter(savePath.resolve(filename).toFile())) {
+                Json.createGenerator(writer).write(jsonObject).close();
+            }
             DurationLogger.log("JSON", event.blocks().size(), duration);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             Logger.getLogger(JsonWriter.class.getName())
                 .log(Level.SEVERE, "JSON Performance test failed due to error: ", e);
         }
