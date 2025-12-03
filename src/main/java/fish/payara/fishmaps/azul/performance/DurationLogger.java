@@ -21,6 +21,10 @@ public class DurationLogger {
         }
     }
     
+    public static List<PerformanceLog> getLogs () {
+        return List.copyOf(logs);
+    }
+    
     public static int size () {
         return logs.size();
     }
