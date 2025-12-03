@@ -15,7 +15,7 @@ services:
       - "9009:9009" # debug
  
   fishmaps-db:
-    image: postgres
+    image: postgres:14.20
     restart: always
     container_name: fishmaps-db
 #    user: "1000:1000"

@@ -14,6 +14,7 @@ import java.util.logging.Logger;
  */
 public class EnvLoader {
     private static final String ENV_FILE = "../.env";
+    private static final String ALTERNATE_ENV = "/tmp/.env";
     private static boolean loaded = false;
     private static final Logger logger = Logger.getLogger(EnvLoader.class.getName());
 
@@ -26,6 +27,10 @@ public class EnvLoader {
 
         try {
             File envFile = Paths.get(ENV_FILE).toFile();
+            if (!envFile.exists()) {
+                envFile = Paths.get(ALTERNATE_ENV).toFile();
+            }
+            
             if (envFile.exists()) {
                 Properties props = new Properties();
                 try (FileReader reader = new FileReader(envFile)) {
