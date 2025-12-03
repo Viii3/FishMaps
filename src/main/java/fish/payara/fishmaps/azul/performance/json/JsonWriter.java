@@ -43,7 +43,7 @@ public class JsonWriter {
         String saveDir = System.getenv("azul_json_save_directory");
         if (saveDir == null) {
             Logger.getLogger(JsonWriter.class.getName())
-                .log(Level.INFO, "The environment variable \"azul_json_save_directory\" must be set to a valid path.");
+                .log(Level.WARNING, "The environment variable \"azul_json_save_directory\" must be set to a valid path.");
             return;
         }
         String filename = "BlockRequest-" + System.currentTimeMillis() + ".json";
@@ -56,7 +56,8 @@ public class JsonWriter {
             Json.createGenerator(writer).write(jsonObject).close();
             DurationLogger.log("JSON", event.blocks().size(), duration);
         } catch (IOException e) {
-            
+            Logger.getLogger(JsonWriter.class.getName())
+                .log(Level.SEVERE, "JSON Performance test failed due to error: ", e);
         }
 
         BatchRuntime.getJobOperator().start("batch-performance", new Properties());
