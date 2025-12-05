@@ -9,7 +9,7 @@
     </listeners>
 
     <step id="processJson">
-        <chunk>
+        <chunk item-count="100">
             <reader ref="blockJsonReader"></reader>
             <processor ref="blockProcessor"></processor>
             <writer ref="blockWriter"></writer>
