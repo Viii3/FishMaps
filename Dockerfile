@@ -2,9 +2,12 @@ FROM payara/server-full:6.2025.1-jdk21
 
 COPY postgres.jar /tmp
 COPY default_file_user /tmp
+COPY .env /tmp
+ENV azul_json_save_directory=/tmp/azul_json/
 RUN echo 'add-library /tmp/postgres.jar' > $POSTBOOT_COMMANDS
 COPY target/*.war $DEPLOY_DIR/fishmaps.war
 
+RUN echo "create-jvm-options '-Xmx4g'" >> $POSTBOOT_COMMANDS
 RUN echo 'create-jdbc-connection-pool --datasourceclassname org.postgresql.ds.PGSimpleDataSource --driverclassname org.postgresql.Driver --restype javax.sql.DataSource --property user=postgres:password=password:URL="jdbc\\:postgresql\\://fishmaps-db/fishmaps" fishmapsPool' >> $POSTBOOT_COMMANDS
 RUN echo 'ping-connection-pool fishmapsPool' >> $POSTBOOT_COMMANDS
 RUN echo 'create-jdbc-resource --connectionpoolid fishmapsPool jdbc/fishmaps' >> $POSTBOOT_COMMANDS
