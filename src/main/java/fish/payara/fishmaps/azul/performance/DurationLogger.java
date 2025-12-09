@@ -43,6 +43,10 @@ public class DurationLogger {
         logs.add(performanceLog);
         performanceLog.log();
     }
+
+    public static void clear () {
+        logs.clear();
+    }
     
     public record PerformanceLog (String module, Optional<Integer> itemSize, long nanosecondDuration) {
         public void log () {
