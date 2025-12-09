@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -58,7 +59,7 @@ public class BlockJsonReader extends AbstractItemReader {
                 try (Stream<Path> contents = Files.list(saveDirectory)) {
                     this.jsonFile = contents
                         .filter(path -> path.toFile().isFile() && path.toString().endsWith("json"))
-                        .max((path1, path2) -> Math.toIntExact(path1.toFile().lastModified() - path2.toFile().lastModified()))
+                        .max(Comparator.comparing(Path::toFile))
                         .map(Path::toFile)
                         .orElse(null);
                     
